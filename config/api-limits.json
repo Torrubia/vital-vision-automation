@@ -1,0 +1,10 @@
+{
+  "auto_publish": false,
+  "require_human_approval": true,
+  "daily_generation_limit": 20,
+  "daily_image_generation_limit": 10,
+  "daily_api_call_limit": 100,
+  "allowed_modes": ["draft", "review", "approved"],
+  "blocked_modes": ["auto_publish", "auto_spend", "auto_send"],
+  "notes": "MVP safety limits for Vital Vision automation. Increase only after validation."
+}
