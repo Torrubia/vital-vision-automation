@@ -1,0 +1,17 @@
+{
+  "name": "vital-vision-automation",
+  "version": "1.0.0",
+  "description": "Vital Vision Shop — Safe organic content automation. No auto-publish. No API calls without explicit enablement.",
+  "private": true,
+  "scripts": {
+    "image:check": "node scripts/image/check-env.js",
+    "image:generate:test": "node scripts/image/generate-image-placeholder.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "notes": "AUTO_PUBLISH=false. REQUIRE_HUMAN_APPROVAL=true. RUN_IMAGE_GENERATION=false by default."
+}
