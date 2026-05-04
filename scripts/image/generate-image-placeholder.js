@@ -42,7 +42,7 @@ if (REQUIRE_APPROVAL === 'false') {
 
 // API key check — never print full key
 const apiKey = process.env.GOOGLE_API_KEY;
-const model  = process.env.GEMINI_IMAGE_MODEL || 'NOT SET';
+const model  = process.env.GEMINI_IMAGE_MODEL || 'gemini-3.1-flash-image-preview';
 
 if (!apiKey || apiKey.trim() === '') {
   console.error('MISSING: GOOGLE_API_KEY is not set in .env.');
@@ -144,22 +144,65 @@ console.log('');
 console.log('RUN_IMAGE_GENERATION=true detected. Proceeding with API call...');
 console.log('');
 
-// NOTE: Real Gemini Image API integration goes here.
-// The block below is a scaffold — install the SDK and implement when ready.
-//
-// Example using @google/generative-ai (install with: npm install @google/generative-ai):
-//
-// const { GoogleGenerativeAI } = require('@google/generative-ai');
-// const genAI = new GoogleGenerativeAI(apiKey);
-// const imageModel = genAI.getGenerativeModel({ model });
-// const result = await imageModel.generateContent(imagePrompt.style);
-// const imageData = result.response... (handle per SDK docs)
-// fs.writeFileSync(outputPath, imageData);
-//
-// Refer to: https://ai.google.dev/gemini-api/docs/image-generation
+const { GoogleGenerativeAI } = require('@google/generative-ai');
 
-console.log('NOTE: Real API integration scaffold is in place.');
-console.log('Install SDK and implement generation block before enabling.');
-console.log('No API call was made — scaffold only.');
-console.log('');
-console.log('Human approval required before any image is used in a post.');
+async function generateImage() {
+  try {
+    const genAI = new GoogleGenerativeAI(apiKey);
+
+    // Model read from GEMINI_IMAGE_MODEL in .env — uses generateContent with responseModalities
+    console.log(`Using model: ${model}`);
+    const imageModel = genAI.getGenerativeModel({
+      model,
+      generationConfig: {
+        responseModalities: ['image', 'text'],
+      },
+    });
+
+    console.log('Sending prompt to Gemini Image API...');
+    console.log(`Prompt: ${imagePrompt.style.substring(0, 80)}...`);
+    console.log('');
+
+    const result = await imageModel.generateContent(imagePrompt.style);
+    const parts = result.response.candidates?.[0]?.content?.parts || [];
+    const imagePart = parts.find((p) => p.inlineData?.mimeType?.startsWith('image/'));
+
+    if (!imagePart) {
+      console.error('No image returned from API. No file saved.');
+      console.error('Check your API quota and model availability.');
+      process.exit(1);
+    }
+
+    // Save image to assets/generated/
+    const ext = imagePart.inlineData.mimeType.split('/')[1] || 'png';
+    const imageFile = path.join(GENERATED, `${timestamp}-inner-calm.${ext}`);
+    const imageBytes = Buffer.from(imagePart.inlineData.data, 'base64');
+    fs.writeFileSync(imageFile, imageBytes);
+
+    // Update prompt record status
+    promptRecord.status = 'generated';
+    promptRecord.outputFile = `assets/generated/${path.basename(imageFile)}`;
+    fs.writeFileSync(promptFile, JSON.stringify(promptRecord, null, 2));
+
+    console.log(`Image saved:  assets/generated/${path.basename(imageFile)}`);
+    console.log(`Prompt log:   assets/prompts/${path.basename(promptFile)}`);
+    console.log('');
+    console.log('IMPORTANT: Human approval required before this image is used in any post.');
+    console.log('Use automations/approved/approval-checklist.md to review.');
+    console.log('AUTO_PUBLISH=false — image will not be uploaded automatically.');
+
+  } catch (err) {
+    console.error('');
+    console.error('API call failed:', err.message || err);
+    console.error('');
+    console.error('Common causes:');
+    console.error('  - GOOGLE_API_KEY does not have Gemini Image API access');
+    console.error(`  - ${model} not available in your region or plan`);
+    console.error('  - Daily quota exceeded (limit: 10 images — see config/api-limits.json)');
+    console.error('');
+    console.error('No image was saved. No image was published.');
+    process.exit(1);
+  }
+}
+
+generateImage();

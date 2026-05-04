@@ -2,3 +2,10 @@
 logs/
 .DS_Store
 node_modules/
+
+# Generated output — runtime artifacts, not source code
+assets/generated/*
+assets/prompts/*
+# Keep placeholder .gitkeep files so directories are tracked
+!assets/generated/.gitkeep
+!assets/prompts/.gitkeep
