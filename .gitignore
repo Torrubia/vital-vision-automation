@@ -6,6 +6,8 @@ node_modules/
 # Generated output — runtime artifacts, not source code
 assets/generated/*
 assets/prompts/*
+reports/vqb/*
 # Keep placeholder .gitkeep files so directories are tracked
 !assets/generated/.gitkeep
 !assets/prompts/.gitkeep
+!reports/vqb/.gitkeep

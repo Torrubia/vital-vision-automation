@@ -1,0 +1,51 @@
+{
+  "description": "Vital Vision Shop — Quiz Funnel Map",
+  "notes": "Quiz IDs are loaded from VQB_ORGANIC_QUIZ_ID and VQB_PAID_QUIZ_ID in .env. Do not hardcode IDs here.",
+  "quizzes": {
+    "organic": {
+      "envVar": "VQB_ORGANIC_QUIZ_ID",
+      "name": "VV Home Quick Match",
+      "type": "short",
+      "questionCount": 1,
+      "placement": ["Homepage hero CTA", "Instagram bio link", "Organic social posts"],
+      "traffic": "Organic",
+      "goal": "Low-friction product match for cold social traffic",
+      "doNotUseFor": ["Google Ads", "Meta Ads paid landing pages"]
+    },
+    "paid": {
+      "envVar": "VQB_PAID_QUIZ_ID",
+      "name": "VV Google Ads Wellness Quiz",
+      "type": "full",
+      "questionCount": 5,
+      "placement": ["Google Ads landing page", "Meta Ads landing page", "Paid quiz page"],
+      "traffic": "Paid",
+      "goal": "Qualified product match with higher intent paid traffic",
+      "doNotUseFor": ["Homepage", "Organic social CTAs"]
+    }
+  },
+  "api": {
+    "baseUrl": "https://api-production.visualquizbuilder.com/api/public",
+    "mode": "read_only",
+    "keysInEnv": [
+      "VQB_PRIVATE_API_KEY",
+      "VQB_PUBLIC_API_KEY",
+      "VQB_BROWSER_API_KEY"
+    ]
+  },
+  "safetyRules": {
+    "autoPublish": false,
+    "requireHumanApproval": true,
+    "allowedApiMode": "read_only",
+    "neverEditQuizViaApi": true,
+    "neverExposePrivateKeyInFrontend": true
+  },
+  "funnelFlow": [
+    "Instagram / Facebook / Reels (organic)",
+    "Quiz CTA — link in bio",
+    "VQB Quiz (organic: 1Q / paid: 5Q)",
+    "Personalized product recommendation",
+    "Shopify product page",
+    "Checkout",
+    "Email follow-up"
+  ]
+}

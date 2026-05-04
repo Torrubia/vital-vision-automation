@@ -5,7 +5,8 @@
   "private": true,
   "scripts": {
     "image:check": "node scripts/image/check-env.js",
-    "image:generate:test": "node scripts/image/generate-image-placeholder.js"
+    "image:generate:test": "node scripts/image/generate-image-placeholder.js",
+    "vqb:check": "node scripts/vqb/validate-vqb-env.js"
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
