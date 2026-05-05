@@ -6,7 +6,9 @@
   "scripts": {
     "image:check": "node scripts/image/check-env.js",
     "image:generate:test": "node scripts/image/generate-image-placeholder.js",
-    "vqb:check": "node scripts/vqb/validate-vqb-env.js"
+    "vqb:check": "node scripts/vqb/validate-vqb-env.js",
+    "vqb:build-update-packet": "node scripts/vqb/build-safe-update-packet.js",
+    "vqb:validate-update-packet": "node scripts/vqb/validate-safe-update-packet.js"
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
