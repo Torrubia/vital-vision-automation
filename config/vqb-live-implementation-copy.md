@@ -38,7 +38,7 @@ Find in VQB: Quiz Settings → Email Gate / Lead Capture Screen
 | Field | Copy to paste |
 |---|---|
 | Headline | Unlock Your Personalized Result |
-| Subhead | Get your wellness match + 10% off your first order. |
+| Subhead | Your personalized result is ready — plus 10% off your first order. |
 | Email placeholder | Your email address |
 | CTA button | Reveal My Match → |
 | Micro-copy | No spam. Unsubscribe anytime. |
@@ -52,7 +52,7 @@ Find in VQB: Quiz Settings → Discount / Coupon Screen
 | Field | Copy to paste |
 |---|---|
 | Headline | Your 10% Off Code Is Ready |
-| Subhead | Scroll down to see your personalized wellness match. |
+| Subhead | Continue to see your personalized wellness match. |
 | Discount code | WELCOME10 |
 | Instructions | Applied automatically at checkout · Valid for 48 hours |
 | CTA button | See My Product Match ↓ |
@@ -76,7 +76,7 @@ Find in VQB: Result Pages → Inner Bloom (or result matched to "Digestion & Gut
 | Result headline | Your gut may be ready for daily support. |
 | Product name | Inner Bloom — Advanced Probiotic Formula |
 | Short description | Formulated to support healthy digestion and daily gut balance as part of a consistent wellness routine. One simple ritual, every morning. |
-| Quantity label | Choose Your Supply |
+| Quantity label | Choose Your Starting Point |
 | Primary CTA | Shop This Match |
 | Secondary CTA | Why This Match? |
 | Disclaimer | This recommendation is for educational purposes only and is not medical advice. Results may vary. |
@@ -93,7 +93,7 @@ Find in VQB: Result Pages → Inner Calm (or result matched to "Stress & Calm")
 | Result headline | Your evenings may deserve a calmer ritual. |
 | Product name | Inner Calm — Magnesium Glycinate |
 | Short description | Formulated with magnesium glycinate to support a calm evening routine and overall wellness. A quiet daily ritual designed just for you. |
-| Quantity label | Choose Your Supply |
+| Quantity label | Choose Your Starting Point |
 | Primary CTA | Shop This Match |
 | Secondary CTA | Why This Match? |
 | Disclaimer | This recommendation is for educational purposes only and is not medical advice. Results may vary. |
@@ -110,7 +110,7 @@ Find in VQB: Result Pages → Inner Grow (or result matched to "Hair, Skin & Nai
 | Result headline | Your glow may start from within. |
 | Product name | Inner Grow — Hair, Skin & Nails Support |
 | Short description | Formulated to support healthy hair, skin, and nails from within as part of a consistent daily wellness routine. Nourishment that works with your body. |
-| Quantity label | Choose Your Supply |
+| Quantity label | Choose Your Starting Point |
 | Primary CTA | Shop This Match |
 | Secondary CTA | Why This Match? |
 | Disclaimer | This recommendation is for educational purposes only and is not medical advice. Results may vary. |
@@ -124,10 +124,10 @@ Find in VQB: Result Pages → Inner Balance (or result matched to "Overall Daily
 | Field | Copy to paste |
 |---|---|
 | Global label | Your Recommended Wellness Match |
-| Result headline | Your daily wellness foundation may start here. |
+| Result headline | Your body may be ready for a complete daily foundation. |
 | Product name | Inner Balance — Daily Complete Multivitamin |
 | Short description | A complete daily multivitamin designed to support your overall wellness from within. One capsule. One ritual. Every day. |
-| Quantity label | Choose Your Supply |
+| Quantity label | Choose Your Starting Point |
 | Primary CTA | Shop This Match |
 | Secondary CTA | Why This Match? |
 | Disclaimer | This recommendation is for educational purposes only and is not medical advice. Results may vary. |

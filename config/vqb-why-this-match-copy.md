@@ -59,13 +59,11 @@ Why Inner Calm?
 **Copy:**
 Your answers suggest your evenings could use more intentional support.
 
-Inner Calm uses magnesium glycinate — a form of magnesium that is gentle on the
-stomach and designed to support relaxation and overall calm as part of a
-consistent nightly routine.
+Inner Calm uses magnesium glycinate — a form of magnesium designed to support
+relaxation and overall calm as part of a consistent nightly routine.
 
-Magnesium is one of the most common nutritional gaps in modern diets. Inner Calm
-is formulated to help fill that gap with a daily ritual that supports your body's
-natural wind-down process.
+Magnesium is one of the most common nutritional gaps in modern diets — Inner Calm
+is designed to support that daily need.
 
 One small step each evening. Designed for how you actually live.
 

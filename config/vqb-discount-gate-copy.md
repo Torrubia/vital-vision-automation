@@ -37,7 +37,7 @@ The screen is visually heavy and may feel like a pause in the flow.
 Your 10% Off Code Is Ready
 
 **Subhead:**
-Scroll down to see your personalized wellness match.
+Continue to see your personalized wellness match.
 
 **Code block:**
 ```

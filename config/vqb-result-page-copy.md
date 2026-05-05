@@ -37,7 +37,7 @@ Enter your email to unlock your personalized result and receive 10% off your fir
 Unlock Your Personalized Result
 
 **Subhead:**
-Get your wellness match + 10% off your first order.
+Your personalized result is ready — plus 10% off your first order.
 
 **Email field placeholder:**
 Your email address

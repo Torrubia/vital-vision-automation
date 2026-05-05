@@ -7,7 +7,7 @@
 ## EMAIL CAPTURE
 
 Headline:          Unlock Your Personalized Result
-Subhead:           Get your wellness match + 10% off your first order.
+Subhead:           Your personalized result is ready — plus 10% off your first order.
 Email placeholder: Your email address
 CTA:               Reveal My Match →
 Micro-copy:        No spam. Unsubscribe anytime.
@@ -17,7 +17,7 @@ Micro-copy:        No spam. Unsubscribe anytime.
 ## DISCOUNT CODE
 
 Headline:     Your 10% Off Code Is Ready
-Subhead:      Scroll down to see your personalized wellness match.
+Subhead:      Continue to see your personalized wellness match.
 Code:         WELCOME10
 Instructions: Applied automatically at checkout · Valid for 48 hours
 CTA:          See My Product Match ↓
@@ -31,7 +31,7 @@ Headline:      Your gut may be ready for daily support.
 Product name:  Inner Bloom — Advanced Probiotic Formula
 Description:   Formulated to support healthy digestion and daily gut balance as part of a
                consistent wellness routine. One simple ritual, every morning.
-Qty label:     Choose Your Supply
+Qty label:     Choose Your Starting Point
 Primary CTA:   Shop This Match
 Secondary CTA: Why This Match?
 Disclaimer:    This recommendation is for educational purposes only and is not medical advice.
@@ -55,7 +55,7 @@ Headline:      Your evenings may deserve a calmer ritual.
 Product name:  Inner Calm — Magnesium Glycinate
 Description:   Formulated with magnesium glycinate to support a calm evening routine and
                overall wellness. A quiet daily ritual designed just for you.
-Qty label:     Choose Your Supply
+Qty label:     Choose Your Starting Point
 Primary CTA:   Shop This Match
 Secondary CTA: Why This Match?
 Disclaimer:    This recommendation is for educational purposes only and is not medical advice.
@@ -78,7 +78,7 @@ Headline:      Your glow may start from within.
 Product name:  Inner Grow — Hair, Skin & Nails Support
 Description:   Formulated to support healthy hair, skin, and nails from within as part of a
                consistent daily wellness routine. Nourishment that works with your body.
-Qty label:     Choose Your Supply
+Qty label:     Choose Your Starting Point
 Primary CTA:   Shop This Match
 Secondary CTA: Why This Match?
 Disclaimer:    This recommendation is for educational purposes only and is not medical advice.
@@ -97,11 +97,11 @@ Compliance tag: Results may vary. This is not medical advice.
 ## INNER BALANCE RESULT
 
 Global label:  Your Recommended Wellness Match
-Headline:      Your daily wellness foundation may start here.
+Headline:      Your body may be ready for a complete daily foundation.
 Product name:  Inner Balance — Daily Complete Multivitamin
 Description:   A complete daily multivitamin designed to support your overall wellness from
                within. One capsule. One ritual. Every day.
-Qty label:     Choose Your Supply
+Qty label:     Choose Your Starting Point
 Primary CTA:   Shop This Match
 Secondary CTA: Why This Match?
 Disclaimer:    This recommendation is for educational purposes only and is not medical advice.

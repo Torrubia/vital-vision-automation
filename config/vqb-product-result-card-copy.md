@@ -26,7 +26,7 @@ Formulated to support healthy digestion and daily gut balance as part of a consi
 wellness routine. One simple ritual, every morning.
 
 **Quantity selector label:**
-Choose Your Supply
+Choose Your Starting Point
 
 **Primary CTA:**
 Shop This Match
@@ -55,7 +55,7 @@ Formulated with magnesium glycinate to support a calm evening routine and overal
 wellness. A quiet daily ritual designed just for you.
 
 **Quantity selector label:**
-Choose Your Supply
+Choose Your Starting Point
 
 **Primary CTA:**
 Shop This Match
@@ -84,7 +84,7 @@ Formulated to support healthy hair, skin, and nails from within as part of a
 consistent daily wellness routine. Nourishment that works with your body.
 
 **Quantity selector label:**
-Choose Your Supply
+Choose Your Starting Point
 
 **Primary CTA:**
 Shop This Match
@@ -103,7 +103,7 @@ Results may vary.
 **Quiz answer trigger:** Overall Daily Wellness
 
 **Result headline:**
-Your daily wellness foundation may start here.
+Your body may be ready for a complete daily foundation.
 
 **Product display name:**
 Inner Balance — Daily Complete Multivitamin
@@ -113,7 +113,7 @@ A complete daily multivitamin designed to support your overall wellness from wit
 One capsule. One ritual. Every day.
 
 **Quantity selector label:**
-Choose Your Supply
+Choose Your Starting Point
 
 **Primary CTA:**
 Shop This Match
