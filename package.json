@@ -13,7 +13,8 @@
     "vqb:backup-current": "node scripts/vqb/backup-current-quiz.js",
     "vqb:build-update-payload": "node scripts/vqb/build-vqb-update-payload.js",
     "vqb:dry-run-update": "node scripts/vqb/dry-run-vqb-update.js",
-    "vqb:diff-update": "node scripts/vqb/diff-vqb-update.js"
+    "vqb:diff-update": "node scripts/vqb/diff-vqb-update.js",
+    "vqb:rollback": "node scripts/vqb/rollback-vqb-update.js"
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.1",

@@ -4,10 +4,11 @@
 
 ---
 
-## Current Status: APPROVED FOR HUMAN APPROVAL STEP — Gates 1–3 complete. QA review passed.
+## Current Status: GATES 1–5 + 7 COMPLETE — Awaiting Gate 6 (VQB_API_MODE=approved_write) before write run.
 
 QA Guard reviewed: 2026-05-05 (post-dry-run)
 Reviewed by: /vv-qa-guard agent
+Last updated: 2026-05-05 (Gates 5 + 7 completed)
 
 ---
 
@@ -19,11 +20,11 @@ Reviewed by: /vv-qa-guard agent
 | 2 | Dry-run passed | COMPLETE ✅ | 6 screens, 0 writes, all blocked — `reports/vqb/2026-05-05T17-20-32-344Z-dry-run-result.json` |
 | 3 | Diff report exists | COMPLETE ✅ | `reports/vqb/vqb-update-diff-report.md` |
 | 4 | QA Guard approved | COMPLETE ✅ | This review — all checks passed (see below) |
-| 5 | Human approval file | NOT MET | Create `automations/approved/2026-05-05-vqb-update-approval.md` |
-| 6 | VQB_API_MODE=approved_write | NOT MET | Set manually in .env just before write run only |
-| 7 | Rollback command | NOT MET | `npm run vqb:rollback` script to be built |
+| 5 | Human approval file | COMPLETE ✅ | `automations/approved/2026-05-05-vqb-update-approval.md` — approved by Lucy |
+| 6 | VQB_API_MODE=approved_write | NOT MET | Set manually in .env just before write run only — then reset immediately after |
+| 7 | Rollback command | COMPLETE ✅ | `npm run vqb:rollback -- --backup=backups/vqb/2026-05-05T17-20-22-715Z-combined-backup.json` |
 
-**Overall verdict: DEFERRED — awaiting Gate 5 (human approval file).**
+**Overall verdict: READY — 6 of 7 gates complete. Only Gate 6 remains (manual .env change just before write).**
 No write has been executed. No live VQB or Shopify content was modified.
 
 ---
@@ -56,6 +57,15 @@ No write has been executed. No live VQB or Shopify content was modified.
 | /vv-growth-cro | .claude/commands/vv-growth-cro.md | READY |
 | /vv-automation-ops | .claude/commands/vv-automation-ops.md | READY |
 | /vv-qa-guard | .claude/commands/vv-qa-guard.md | READY |
+
+## Rollback Reference
+
+```
+npm run vqb:rollback -- --backup=backups/vqb/2026-05-05T17-20-22-715Z-combined-backup.json
+```
+
+Rollback dry-run script: `scripts/vqb/rollback-vqb-update.js`
+Manual fallback: VQB Dashboard → Result Pages → version history → revert
 
 ---
 
