@@ -8,7 +8,12 @@
     "image:generate:test": "node scripts/image/generate-image-placeholder.js",
     "vqb:check": "node scripts/vqb/validate-vqb-env.js",
     "vqb:build-update-packet": "node scripts/vqb/build-safe-update-packet.js",
-    "vqb:validate-update-packet": "node scripts/vqb/validate-safe-update-packet.js"
+    "vqb:validate-update-packet": "node scripts/vqb/validate-safe-update-packet.js",
+    "vqb:fetch-current": "node scripts/vqb/fetch-current-quiz.js",
+    "vqb:backup-current": "node scripts/vqb/backup-current-quiz.js",
+    "vqb:build-update-payload": "node scripts/vqb/build-vqb-update-payload.js",
+    "vqb:dry-run-update": "node scripts/vqb/dry-run-vqb-update.js",
+    "vqb:diff-update": "node scripts/vqb/diff-vqb-update.js"
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
