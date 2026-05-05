@@ -7,7 +7,8 @@ node_modules/
 assets/generated/*
 assets/prompts/*
 reports/vqb/*
-# Keep placeholder .gitkeep files so directories are tracked
+# Keep planning docs and placeholder files — gitignore excludes only runtime output
 !assets/generated/.gitkeep
 !assets/prompts/.gitkeep
 !reports/vqb/.gitkeep
+!reports/vqb/*.md
