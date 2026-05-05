@@ -7,6 +7,8 @@ node_modules/
 assets/generated/*
 assets/prompts/*
 reports/vqb/*
+# VQB backups — pre-write quiz state snapshots, never commit
+backups/
 # Keep planning docs and placeholder files — gitignore excludes only runtime output
 !assets/generated/.gitkeep
 !assets/prompts/.gitkeep
