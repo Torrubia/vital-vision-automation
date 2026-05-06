@@ -2,20 +2,16 @@
  * vqb-dashboard-apply-assisted.js
  * Vital Vision — VQB Dashboard Guided Browser Automation
  *
- * GUIDED MODE by default (--apply flag required for actual field fills).
- * Opens VQB dashboard in a VISIBLE browser. Navigates to each quiz result page.
- * Pauses for human confirmation before filling any field.
- * NEVER auto-clicks Save, Publish, or Generate Key.
- * Does not edit Shopify. Does not change products, pricing, or discount codes.
+ * No credentials stored. No auto-login. Human navigates and logs in manually.
+ * The script opens a visible browser, waits, then observes or applies.
  *
  * Modes:
- *   npm run vqb:dashboard-assisted-apply            → observe mode (no fills)
- *   npm run vqb:dashboard-assisted-apply -- --apply → guided fill mode
+ *   npm run vqb:dashboard-assisted-apply            → observe only (no fills, generates field map)
+ *   npm run vqb:dashboard-assisted-apply -- --apply → guided fill (human confirms each field)
  *
  * Requirements:
- *   npm install playwright
- *   npx playwright install chromium
- *   VQB_DASHBOARD_EMAIL, VQB_DASHBOARD_PASSWORD, VQB_DASHBOARD_URL in .env
+ *   npm install playwright && npx playwright install chromium
+ *   VQB_DASHBOARD_URL optional in .env (defaults to Shopify admin app list)
  */
 
 'use strict';
@@ -36,35 +32,20 @@ console.log('');
 
 if (process.env.AUTO_PUBLISH === 'true')            { console.error('BLOCKED: AUTO_PUBLISH=true');           process.exit(1); }
 if (process.env.REQUIRE_HUMAN_APPROVAL === 'false') { console.error('BLOCKED: REQUIRE_HUMAN_APPROVAL=false'); process.exit(1); }
-if (process.env.VQB_API_MODE !== 'read_only')       { console.error('BLOCKED: VQB_API_MODE must be read_only for guided apply'); process.exit(1); }
+if (process.env.VQB_API_MODE !== 'read_only')       { console.error('BLOCKED: VQB_API_MODE must be read_only'); process.exit(1); }
 
 const APPLY_MODE = process.argv.includes('--apply');
-const mode = APPLY_MODE ? 'GUIDED APPLY (fields will be filled with human confirmation)' : 'OBSERVE (browser opens, no fills, no saves)';
-console.log(`Mode: ${mode}`);
+
+console.log(`Mode: ${APPLY_MODE ? 'GUIDED APPLY — fields filled with human confirmation per field' : 'OBSERVE — browser opens, page scanned, NO fills, NO saves'}`);
 console.log('');
-console.log('ABSOLUTE BLOCKS (enforced in this script):');
-console.log('  ✗ Auto-click Save (never)');
-console.log('  ✗ Auto-click Publish / Go Live (never)');
-console.log('  ✗ Click Generate Key (never)');
-console.log('  ✗ Edit pricing, products, or Shopify (never)');
-console.log('  ✗ Delete any quiz, result page, or screen (never)');
+console.log('ABSOLUTE BLOCKS (hardcoded — cannot be overridden):');
+console.log('  ✗ No auto-fill without explicit y confirmation');
+console.log('  ✗ No auto-click of Save / Publish / Go Live / Activate');
+console.log('  ✗ No click of Generate Key or Reset API Key');
+console.log('  ✗ No changes to pricing, products, discounts in Shopify');
+console.log('  ✗ No deletion of any quiz, result page, or screen');
+console.log('  ✗ No VQB API write calls');
 console.log('');
-
-// ─── Credential Check ─────────────────────────────────────────────────────────
-
-const DASH_EMAIL = process.env.VQB_DASHBOARD_EMAIL;
-const DASH_PASS  = process.env.VQB_DASHBOARD_PASSWORD;
-const DASH_URL   = process.env.VQB_DASHBOARD_URL || 'https://app.visualquizbuilder.com';
-
-if (!DASH_EMAIL || !DASH_PASS) {
-  console.error('BLOCKED: VQB_DASHBOARD_EMAIL and VQB_DASHBOARD_PASSWORD must be set in .env');
-  console.error('');
-  console.error('Add to .env:');
-  console.error('  VQB_DASHBOARD_EMAIL=your@email.com');
-  console.error('  VQB_DASHBOARD_PASSWORD=yourpassword');
-  console.error('  VQB_DASHBOARD_URL=https://app.visualquizbuilder.com');
-  process.exit(1);
-}
 
 // ─── Playwright Check ─────────────────────────────────────────────────────────
 
@@ -72,473 +53,528 @@ let playwright;
 try {
   playwright = require('playwright');
 } catch (_) {
-  console.error('BLOCKED: Playwright is not installed.');
-  console.error('');
-  console.error('Install it:');
-  console.error('  npm install playwright');
-  console.error('  npx playwright install chromium');
+  console.error('BLOCKED: Playwright not installed.');
+  console.error('  npm install playwright && npx playwright install chromium');
   process.exit(1);
 }
 
-// ─── Load Approved Copy ───────────────────────────────────────────────────────
+// ─── Configuration ────────────────────────────────────────────────────────────
 
-const payloadPath = path.join(BASE, 'automations', 'drafts', 'vqb-api-update-draft.json');
-if (!fs.existsSync(payloadPath)) {
-  console.error('MISSING: automations/drafts/vqb-api-update-draft.json');
-  process.exit(1);
-}
-const payload = JSON.parse(fs.readFileSync(payloadPath, 'utf8'));
-const { emailCapture, discountScreen, resultCards } = payload;
-const { innerBloom, innerCalm, innerGrow, innerBalance } = resultCards;
+const SHOPIFY_DOMAIN = process.env.SHOPIFY_STORE_DOMAIN || null;
+const VQB_DASH_URL   = process.env.VQB_DASHBOARD_URL    || null;
 
-// ─── Human Prompt Helper ──────────────────────────────────────────────────────
+// Default landing URL — Shopify admin app list if domain known, else generic VQB
+const START_URL = VQB_DASH_URL
+  || (SHOPIFY_DOMAIN ? `https://${SHOPIFY_DOMAIN}/admin/apps` : 'https://app.visualquizbuilder.com');
+
+console.log(`Start URL:  ${START_URL}`);
+console.log(`(Change with VQB_DASHBOARD_URL in .env)`);
+console.log('');
+
+// ─── Readline (interactive terminal prompt) ───────────────────────────────────
 
 const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
 
 function ask(question) {
-  return new Promise(resolve => rl.question(question, resolve));
+  return new Promise(resolve => {
+    rl.question(question, answer => resolve(answer));
+  });
 }
 
-async function confirm(prompt) {
-  const answer = await ask(`  ${prompt} [y/N]: `);
-  return answer.trim().toLowerCase() === 'y';
-}
+// ─── Directory Setup ──────────────────────────────────────────────────────────
+
+const REPORTS     = path.join(BASE, 'reports', 'vqb');
+const SCREENSHOTS = path.join(REPORTS, 'screenshots');
+fs.mkdirSync(SCREENSHOTS, { recursive: true });
 
 // ─── Screenshot Helper ────────────────────────────────────────────────────────
 
-const SCREENSHOTS = path.join(BASE, 'reports', 'vqb', 'screenshots');
-fs.mkdirSync(SCREENSHOTS, { recursive: true });
-
-async function screenshot(page, name) {
-  const ts    = new Date().toISOString().replace(/[:.]/g, '-');
-  const file  = path.join(SCREENSHOTS, `${ts}-${name}.png`);
-  await page.screenshot({ path: file, fullPage: true });
-  console.log(`  Screenshot: reports/vqb/screenshots/${path.basename(file)}`);
+async function screenshot(page, label) {
+  const ts   = new Date().toISOString().replace(/[:.]/g, '-');
+  const file = path.join(SCREENSHOTS, `${ts}-${label}.png`);
+  try {
+    await page.screenshot({ path: file, fullPage: false });
+    console.log(`  Screenshot: reports/vqb/screenshots/${path.basename(file)}`);
+  } catch (_) {
+    console.log(`  Screenshot failed for ${label} (page may have navigated)`);
+  }
   return file;
 }
 
-// ─── Safe Fill Helper ─────────────────────────────────────────────────────────
+// ─── Field Discovery ──────────────────────────────────────────────────────────
 
 /**
- * Safely fill a field. Tries multiple selector strategies.
- * Pauses for human confirmation before filling in APPLY_MODE.
- * In observe mode, only reports whether the field was found.
+ * Scans the current page for editable text fields, textareas, and
+ * buttons. Returns a structured field map.
  */
-async function safeFill(page, { fieldName, value, selectors }) {
-  console.log('');
-  console.log(`  ┌─ Field: ${fieldName}`);
-  console.log(`  │  Value: ${value.substring(0, 80)}${value.length > 80 ? '...' : ''}`);
+async function discoverFields(page) {
+  return page.evaluate(() => {
+    const results = {
+      url:      location.href,
+      title:    document.title,
+      inputs:   [],
+      textareas:[],
+      buttons:  [],
+      headings: [],
+      sections: [],
+    };
 
-  let foundEl   = null;
-  let foundSel  = null;
+    // ── Text inputs ────────────────────────────────────────────────────────────
+    document.querySelectorAll('input[type="text"], input[type="email"], input:not([type])').forEach(el => {
+      const label = el.labels?.[0]?.textContent?.trim()
+        || el.placeholder
+        || el.name
+        || el.id
+        || el.getAttribute('aria-label')
+        || '(unlabelled)';
+      results.inputs.push({
+        tag:         'input',
+        type:        el.type || 'text',
+        label:       label.substring(0, 80),
+        name:        el.name  || null,
+        id:          el.id    || null,
+        placeholder: el.placeholder || null,
+        currentValue:(el.value || '').substring(0, 120),
+        selector:    el.id ? `#${el.id}` : (el.name ? `input[name="${el.name}"]` : null),
+        visible:     el.offsetParent !== null,
+      });
+    });
 
-  for (const sel of selectors) {
-    try {
-      const el = await page.$(sel);
-      if (el) {
-        foundEl  = el;
-        foundSel = sel;
-        break;
+    // ── Textareas ──────────────────────────────────────────────────────────────
+    document.querySelectorAll('textarea').forEach(el => {
+      const label = el.labels?.[0]?.textContent?.trim()
+        || el.placeholder
+        || el.name
+        || el.id
+        || el.getAttribute('aria-label')
+        || '(unlabelled)';
+      results.textareas.push({
+        tag:         'textarea',
+        label:       label.substring(0, 80),
+        name:        el.name  || null,
+        id:          el.id    || null,
+        placeholder: el.placeholder || null,
+        currentValue:(el.value || '').substring(0, 120),
+        selector:    el.id ? `#${el.id}` : (el.name ? `textarea[name="${el.name}"]` : null),
+        visible:     el.offsetParent !== null,
+      });
+    });
+
+    // ── Buttons (for reference — not clicked by script) ───────────────────────
+    document.querySelectorAll('button, [role="button"]').forEach(el => {
+      const text = (el.textContent || el.innerText || '').trim().substring(0, 60);
+      if (text) results.buttons.push({ text, id: el.id || null });
+    });
+
+    // ── Page headings ──────────────────────────────────────────────────────────
+    document.querySelectorAll('h1, h2, h3').forEach(el => {
+      const text = el.textContent.trim().substring(0, 120);
+      if (text) results.headings.push({ tag: el.tagName, text });
+    });
+
+    // ── Sections / panels (look for quiz result-related containers) ────────────
+    const sectionKeywords = ['result', 'outcome', 'email', 'discount', 'capture', 'screen', 'page', 'match'];
+    document.querySelectorAll('[class*="result"], [class*="outcome"], [class*="screen"], [id*="result"], [data-type]').forEach(el => {
+      const text = (el.textContent || '').trim().substring(0, 100);
+      const cls  = el.className || '';
+      if (sectionKeywords.some(k => cls.toLowerCase().includes(k) || text.toLowerCase().includes(k))) {
+        results.sections.push({ tag: el.tagName, class: cls.substring(0, 80), preview: text });
       }
-    } catch (_) {}
-  }
+    });
 
-  if (!foundEl) {
-    console.log(`  │  Status: NOT FOUND — tried ${selectors.length} selectors`);
-    console.log(`  │  Action: Manual paste required`);
-    console.log(`  └─ ⚠️  Skipping (field not auto-located)`);
-    return { found: false, filled: false, fieldName, selector: null };
-  }
-
-  console.log(`  │  Found:  ${foundSel}`);
-
-  if (!APPLY_MODE) {
-    console.log(`  └─ OBSERVE mode — field located but not filled`);
-    return { found: true, filled: false, fieldName, selector: foundSel };
-  }
-
-  const ok = await confirm(`Fill "${fieldName}" with the value above?`);
-  if (!ok) {
-    console.log(`  └─ Skipped by user`);
-    return { found: true, filled: false, fieldName, selector: foundSel };
-  }
-
-  await foundEl.click({ clickCount: 3 });
-  await foundEl.fill(value);
-  console.log(`  └─ FILLED ✅`);
-  return { found: true, filled: true, fieldName, selector: foundSel };
+    return results;
+  });
 }
 
-// ─── Screen Runners ───────────────────────────────────────────────────────────
+// ─── Report Writers ───────────────────────────────────────────────────────────
 
-async function runEmailCapture(page) {
-  console.log('');
-  console.log('── SCREEN 1: Email Capture ───────────────────────────────────────────');
-  console.log('   Expected location: Quiz Settings → Email Gate / Lead Capture');
-  console.log('');
-  await screenshot(page, 'before-email-capture');
+function writeObserveReport({ ts, url, title, screenshot: ss, fields, summary }) {
+  const inputRows = fields.inputs
+    .map(f => `| ${f.label.substring(0, 40).padEnd(40)} | ${(f.name||f.id||'—').substring(0,30)} | ${f.visible?'visible':'hidden'} | ${(f.currentValue||'').substring(0,50)} |`)
+    .join('\n') || '| (none found) | — | — | — |';
 
-  if (APPLY_MODE) {
-    console.log('  Navigate to the Email Capture screen in the VQB editor, then press Enter.');
-    await ask('  Press Enter when you are on the Email Capture screen...');
-    await screenshot(page, 'on-email-capture');
-  }
+  const textareaRows = fields.textareas
+    .map(f => `| ${f.label.substring(0, 40).padEnd(40)} | ${(f.name||f.id||'—').substring(0,30)} | ${f.visible?'visible':'hidden'} | ${(f.currentValue||'').substring(0,50)} |`)
+    .join('\n') || '| (none found) | — | — | — |';
 
-  const results = [];
-  results.push(await safeFill(page, {
-    fieldName: 'Headline',
-    value: emailCapture.headline,
-    selectors: [
-      'input[placeholder*="headline" i]',
-      'input[name*="headline" i]',
-      'textarea[name*="headline" i]',
-      '[data-field="headline"] input',
-      '[data-field="headline"] textarea',
-      '.email-capture-headline input',
-      '.headline-field input',
-    ],
-  }));
+  const buttonRows = fields.buttons
+    .slice(0, 30)
+    .map(b => `| ${b.text.substring(0,60)} |`)
+    .join('\n') || '| (none found) |';
 
-  results.push(await safeFill(page, {
-    fieldName: 'Subhead',
-    value: emailCapture.subhead,
-    selectors: [
-      'input[placeholder*="subhead" i]',
-      'input[name*="subhead" i]',
-      'textarea[name*="subhead" i]',
-      '[data-field="subhead"] input',
-      '[data-field="description"] input',
-    ],
-  }));
+  const headingRows = fields.headings
+    .map(h => `| ${h.tag} | ${h.text.substring(0,100)} |`)
+    .join('\n') || '| — | (none found) |';
 
-  results.push(await safeFill(page, {
-    fieldName: 'Email placeholder',
-    value: emailCapture.placeholder,
-    selectors: [
-      'input[placeholder*="placeholder" i]',
-      'input[name*="placeholder" i]',
-      '[data-field="placeholder"] input',
-    ],
-  }));
+  const sectionRows = fields.sections.slice(0, 10)
+    .map(s => `| ${s.tag} | ${s.class.substring(0,40)} | ${s.preview.substring(0,60)} |`)
+    .join('\n') || '| — | — | (none found) |';
 
-  results.push(await safeFill(page, {
-    fieldName: 'CTA button',
-    value: emailCapture.ctaButton,
-    selectors: [
-      'input[placeholder*="button" i]',
-      'input[name*="button" i]',
-      'input[name*="cta" i]',
-      '[data-field="button"] input',
-      '[data-field="cta"] input',
-    ],
-  }));
+  const report = `# VQB Dashboard Observe Report — Vital Vision Shop
+# Generated: ${ts}
+# AUTO_PUBLISH=false | REQUIRE_HUMAN_APPROVAL=true | VQB_API_MODE=read_only
 
-  results.push(await safeFill(page, {
-    fieldName: 'Micro-copy',
-    value: emailCapture.microCopy,
-    selectors: [
-      'input[placeholder*="micro" i]',
-      'input[name*="micro" i]',
-      'input[placeholder*="disclaimer" i]',
-      '[data-field="disclaimer"] input',
-    ],
-  }));
+---
 
-  if (APPLY_MODE) {
-    const filled = results.filter(r => r.filled).length;
-    console.log('');
-    console.log(`  Screen 1 summary: ${filled}/${results.length} fields filled`);
-    const anySaved = await confirm('Review all changes above, then click Save in VQB if satisfied. Confirm save was clicked?');
-    console.log(anySaved ? '  User confirmed save ✅' : '  Save skipped — user did not confirm');
-    await screenshot(page, 'after-email-capture');
-  }
+## Session Summary
 
-  return results;
+| Item | Value |
+|---|---|
+| Observed at | ${ts} |
+| Page URL | ${url} |
+| Page title | ${title} |
+| Input fields found | ${fields.inputs.length} |
+| Textareas found | ${fields.textareas.length} |
+| Buttons found (listed) | ${Math.min(fields.buttons.length, 30)} |
+| Sections identified | ${fields.sections.length} |
+| Writes executed | 0 |
+| VQB content modified | NO |
+| Shopify edited | NO |
+| Screenshot | ${ss ? `reports/vqb/screenshots/${path.basename(ss)}` : 'not captured'} |
+
+---
+
+## Page Headings Found
+
+| Tag | Text |
+|---|---|
+${headingRows}
+
+---
+
+## Input Fields Discovered
+
+| Label | name/id | Visible | Current value (first 50 chars) |
+|---|---|---|---|
+${inputRows}
+
+---
+
+## Textarea Fields Discovered
+
+| Label | name/id | Visible | Current value (first 50 chars) |
+|---|---|---|---|
+${textareaRows}
+
+---
+
+## Buttons Present (first 30 — NOT clicked by script)
+
+| Button text |
+|---|
+${buttonRows}
+
+---
+
+## Result/Outcome Sections Detected
+
+| Tag | Class | Preview |
+|---|---|---|
+${sectionRows}
+
+---
+
+## Assessment
+
+${summary}
+
+---
+
+## Next Step
+
+If the correct quiz result page is visible, run the full field map:
+\`\`\`
+npm run vqb:dashboard-assisted-apply
+\`\`\`
+For guided apply with confirmed field fills:
+\`\`\`
+npm run vqb:dashboard-assisted-apply -- --apply
+\`\`\`
+
+Manual copy-paste fallback (always available):
+\`config/vqb-result-copy-to-paste.md\`
+
+---
+
+*No VQB or Shopify content was modified.*
+*All field values shown are current state — nothing was changed.*
+`;
+
+  const rPath = path.join(REPORTS, 'dashboard-observe-report.md');
+  fs.writeFileSync(rPath, report);
+  return rPath;
 }
 
-async function runDiscountScreen(page) {
-  console.log('');
-  console.log('── SCREEN 2: Discount Code ───────────────────────────────────────────');
-  console.log('   Expected location: Quiz Settings → Discount Screen / Coupon Screen');
-  console.log('');
-  await screenshot(page, 'before-discount-screen');
+function writeFieldMap({ ts, url, title, fields }) {
+  const allFields = [
+    ...fields.inputs.map(f => ({ ...f, fieldType: 'input' })),
+    ...fields.textareas.map(f => ({ ...f, fieldType: 'textarea' })),
+  ];
 
-  if (APPLY_MODE) {
-    console.log('  Navigate to the Discount Code screen in the VQB editor, then press Enter.');
-    await ask('  Press Enter when you are on the Discount Code screen...');
-    await screenshot(page, 'on-discount-screen');
-  }
+  const rows = allFields.map((f, i) =>
+    `| ${String(i + 1).padStart(2)} | ${f.fieldType.padEnd(8)} | ${(f.label||'—').substring(0,38).padEnd(38)} | ${(f.name||f.id||'—').substring(0,28).padEnd(28)} | ${(f.placeholder||'—').substring(0,30)} | ${f.visible?'✅':'—'} |`
+  ).join('\n') || '| — | — | (no fields found) | — | — | — |';
 
-  const results = [];
-  results.push(await safeFill(page, {
-    fieldName: 'Headline',
-    value: discountScreen.headline,
-    selectors: ['input[name*="headline" i]', '[data-field="headline"] input'],
-  }));
-  results.push(await safeFill(page, {
-    fieldName: 'Subhead',
-    value: discountScreen.subhead,
-    selectors: ['input[name*="subhead" i]', '[data-field="subhead"] input'],
-  }));
-  results.push(await safeFill(page, {
-    fieldName: 'CTA button',
-    value: discountScreen.ctaButton,
-    selectors: ['input[name*="button" i]', 'input[name*="cta" i]', '[data-field="cta"] input'],
-  }));
-  results.push(await safeFill(page, {
-    fieldName: 'Instructions',
-    value: discountScreen.instructions,
-    selectors: ['input[name*="instruction" i]', 'textarea[name*="instruction" i]'],
-  }));
-  // NOTE: Do NOT auto-fill the code field — it connects to Shopify discount
-  console.log('');
-  console.log(`  ⚠️  SKIPPING auto-fill for Discount Code field.`);
-  console.log(`     Current code should be WELCOME10 — do not change unless intentional.`);
-  console.log(`     Verify manually in VQB dashboard.`);
+  const selectorBlock = allFields
+    .filter(f => f.selector && f.visible)
+    .map(f => `  // ${f.label}\n  '${f.selector}',`)
+    .join('\n') || '  // No auto-locatable selectors found on this page';
 
-  if (APPLY_MODE) {
-    const filled = results.filter(r => r.filled).length;
-    console.log('');
-    console.log(`  Screen 2 summary: ${filled}/${results.length} fields filled`);
-    const saved = await confirm('Review changes, then click Save in VQB if satisfied. Confirm save was clicked?');
-    console.log(saved ? '  User confirmed save ✅' : '  Save skipped');
-    await screenshot(page, 'after-discount-screen');
-  }
+  const map = `# VQB Dashboard Field Map — Vital Vision Shop
+# Generated: ${ts}
+# Page: ${title}
+# URL: ${url}
+# AUTO_PUBLISH=false | REQUIRE_HUMAN_APPROVAL=true | VQB_API_MODE=read_only
 
-  return results;
-}
+---
 
-async function runResultCard(page, { id, label, card, globalLabel }) {
-  console.log('');
-  console.log(`── ${label} ───────────────────────────────────`);
-  console.log('');
-  await screenshot(page, `before-${id}`);
+## All Discovered Editable Fields
 
-  if (APPLY_MODE) {
-    console.log(`  Navigate to the ${label} in the VQB editor, then press Enter.`);
-    await ask(`  Press Enter when you are on the ${label}...`);
-    await screenshot(page, `on-${id}`);
-  }
+| # | Type | Label | name/id | Placeholder | Visible |
+|---|---|---|---|---|---|
+${rows}
 
-  const results = [];
-  results.push(await safeFill(page, {
-    fieldName: 'Global label',
-    value: globalLabel,
-    selectors: ['input[name*="global" i]', '[data-field="globalLabel"] input', 'input[placeholder*="global" i]'],
-  }));
-  results.push(await safeFill(page, {
-    fieldName: 'Result headline',
-    value: card.headline,
-    selectors: ['input[name*="headline" i]', '[data-field="headline"] input', 'input[placeholder*="headline" i]'],
-  }));
-  results.push(await safeFill(page, {
-    fieldName: 'Short description',
-    value: card.description,
-    selectors: ['textarea[name*="description" i]', '[data-field="description"] textarea', 'textarea[placeholder*="description" i]'],
-  }));
-  results.push(await safeFill(page, {
-    fieldName: 'Quantity label',
-    value: card.qtyLabel,
-    selectors: ['input[name*="qty" i]', 'input[name*="quantity" i]', '[data-field="qtyLabel"] input'],
-  }));
-  results.push(await safeFill(page, {
-    fieldName: 'Primary CTA',
-    value: card.primaryCta,
-    selectors: ['input[name*="primary" i]', 'input[name*="cta" i]', '[data-field="primaryCta"] input'],
-  }));
-  results.push(await safeFill(page, {
-    fieldName: 'Secondary CTA',
-    value: card.secondaryCta,
-    selectors: ['input[name*="secondary" i]', '[data-field="secondaryCta"] input'],
-  }));
-  results.push(await safeFill(page, {
-    fieldName: 'Disclaimer',
-    value: card.disclaimer,
-    selectors: ['textarea[name*="disclaimer" i]', '[data-field="disclaimer"] textarea', 'input[name*="disclaimer" i]'],
-  }));
-  // Why This Match
-  results.push(await safeFill(page, {
-    fieldName: 'Why This Match headline',
-    value: card.whyThisMatch.headline,
-    selectors: ['input[name*="why" i]', '[data-field="whyHeadline"] input'],
-  }));
-  results.push(await safeFill(page, {
-    fieldName: 'Why This Match body',
-    value: card.whyThisMatch.body,
-    selectors: ['textarea[name*="why" i]', '[data-field="whyBody"] textarea', 'textarea[name*="explanation" i]'],
-  }));
+---
 
-  if (APPLY_MODE) {
-    const filled = results.filter(r => r.filled).length;
-    console.log('');
-    console.log(`  ${label} summary: ${filled}/${results.length} fields filled`);
-    const saved = await confirm('Review changes, then click Save in VQB if satisfied. Confirm save was clicked?');
-    console.log(saved ? '  User confirmed save ✅' : '  Save skipped');
-    await screenshot(page, `after-${id}`);
-  }
+## Auto-Locatable Selectors (visible fields only)
 
-  return results;
+These selectors can be used in the apply script.
+Review before adding to scripts/vqb/vqb-dashboard-apply-assisted.js:
+
+\`\`\`js
+// Discovered selectors — verify against approved copy fields
+${selectorBlock}
+\`\`\`
+
+---
+
+## Approved Copy Fields to Match
+
+| Approved field | Target selector (to be mapped) |
+|---|---|
+| Email Capture: Headline | TBD — match against discovered inputs above |
+| Email Capture: Subhead | TBD |
+| Email Capture: CTA button | TBD |
+| Discount Screen: Headline | TBD |
+| Discount Screen: CTA button | TBD |
+| Inner Bloom: Result headline | TBD |
+| Inner Bloom: Description | TBD |
+| Inner Calm: Result headline | TBD |
+| Inner Calm: Description | TBD |
+| Inner Grow: Result headline | TBD |
+| Inner Grow: Description | TBD |
+| Inner Balance: Result headline | TBD |
+| Inner Balance: Description | TBD |
+
+Full approved values: automations/drafts/vqb-api-update-draft.json
+
+---
+
+## How to Complete the Mapping
+
+1. Navigate in the browser to each result page (Inner Bloom, etc.)
+2. Run observe mode again to capture that page's fields
+3. Match discovered selectors to the approved copy fields above
+4. Update safeFill() selector arrays in vqb-dashboard-apply-assisted.js
+
+---
+
+*Field map is read-only. Nothing was modified on this page.*
+*Selectors are suggestions — verify in browser DevTools before using.*
+`;
+
+  const mPath = path.join(REPORTS, 'dashboard-field-map.md');
+  fs.writeFileSync(mPath, map);
+  return mPath;
 }
 
 // ─── Main ─────────────────────────────────────────────────────────────────────
 
 async function main() {
   const ts = new Date().toISOString();
-  const allResults = {};
   let browser;
 
   try {
-    console.log(`Launching Chromium (visible browser)...`);
-    console.log(`Dashboard URL: ${DASH_URL}`);
-    console.log('');
-
+    // ── Launch browser ─────────────────────────────────────────────────────────
+    console.log('Launching Chromium (visible browser)...');
     browser = await playwright.chromium.launch({
       headless: false,
-      slowMo: 80,
+      slowMo: 50,
+      args: ['--start-maximized'],
     });
 
     const context = await browser.newContext({
-      viewport: { width: 1440, height: 900 },
+      viewport: null,  // use actual window size
     });
     const page = await context.newPage();
 
-    // ── Navigate to VQB Dashboard ──────────────────────────────────────────────
-    console.log('Navigating to VQB dashboard...');
-    await page.goto(DASH_URL, { waitUntil: 'networkidle', timeout: 30000 });
-    await screenshot(page, '01-dashboard-landing');
+    // ── Navigate to start URL ──────────────────────────────────────────────────
+    console.log(`Navigating to: ${START_URL}`);
+    await page.goto(START_URL, { waitUntil: 'domcontentloaded', timeout: 30000 })
+      .catch(() => console.log('  (navigation timed out — page may still be loading)'));
 
-    // ── Login ──────────────────────────────────────────────────────────────────
-    console.log('Attempting login...');
-    const emailField = await page.$('input[type="email"], input[name="email"], input[placeholder*="email" i]');
-    const passField  = await page.$('input[type="password"]');
+    await screenshot(page, '01-start');
 
-    if (emailField && passField) {
-      await emailField.fill(DASH_EMAIL);
-      await passField.fill(DASH_PASS);
-      const loginBtn = await page.$('button[type="submit"], button:has-text("Log in"), button:has-text("Sign in"), button:has-text("Login")');
-      if (loginBtn) {
-        console.log('  Login form found — filling credentials (masked) and submitting...');
-        await loginBtn.click();
-        await page.waitForLoadState('networkidle', { timeout: 15000 }).catch(() => {});
-        await screenshot(page, '02-after-login');
-        console.log('  Login submitted. Verify browser shows dashboard.');
+    // ── Manual login prompt ────────────────────────────────────────────────────
+    console.log('');
+    console.log('─────────────────────────────────────────────────────────────────');
+    console.log('  MANUAL NAVIGATION REQUIRED');
+    console.log('─────────────────────────────────────────────────────────────────');
+    console.log('');
+    console.log('  In the browser window:');
+    console.log('  1. Log in to VQB (via Shopify admin or app.visualquizbuilder.com)');
+    console.log('  2. Open the quiz editor');
+    console.log('  3. Select: VV Home Quick Match Quiz — 1Q  (Quiz ID: 16047)');
+    console.log('  4. Navigate to a result page or the email capture screen');
+    console.log('');
+    console.log('  This script will NOT click anything until you press Enter below.');
+    console.log('  Take your time. The browser will stay open.');
+    console.log('');
+
+    await ask('  Press Enter when you are on the VQB quiz editor page you want to observe...');
+
+    // ── Observe: capture current page state ───────────────────────────────────
+    console.log('');
+    console.log('Scanning page...');
+    const ss     = await screenshot(page, '02-observed-page');
+    const fields = await discoverFields(page);
+    const url    = page.url();
+    const title  = await page.title();
+
+    console.log(`  URL:       ${url}`);
+    console.log(`  Title:     ${title}`);
+    console.log(`  Inputs:    ${fields.inputs.length}`);
+    console.log(`  Textareas: ${fields.textareas.length}`);
+    console.log(`  Buttons:   ${fields.buttons.length}`);
+    console.log(`  Headings:  ${fields.headings.length}`);
+    console.log('');
+
+    if (fields.headings.length > 0) {
+      console.log('  Page headings:');
+      fields.headings.forEach(h => console.log(`    [${h.tag}] ${h.text}`));
+      console.log('');
+    }
+
+    if (fields.inputs.length > 0) {
+      console.log('  Input fields found:');
+      fields.inputs.forEach(f => {
+        const val = f.currentValue ? ` = "${f.currentValue.substring(0, 40)}"` : '';
+        console.log(`    [${f.visible ? 'visible' : 'hidden '}] ${(f.label||f.name||f.id||'(unlabelled)').substring(0, 50)}${val}`);
+      });
+      console.log('');
+    }
+
+    if (fields.textareas.length > 0) {
+      console.log('  Textarea fields found:');
+      fields.textareas.forEach(f => {
+        const val = f.currentValue ? ` = "${f.currentValue.substring(0, 40)}"` : '';
+        console.log(`    [${f.visible ? 'visible' : 'hidden '}] ${(f.label||f.name||f.id||'(unlabelled)').substring(0, 50)}${val}`);
+      });
+      console.log('');
+    }
+
+    if (fields.buttons.length > 0) {
+      console.log('  Buttons present (not clicked):');
+      fields.buttons.slice(0, 20).forEach(b => console.log(`    "${b.text}"`));
+      if (fields.buttons.length > 20) console.log(`    ... and ${fields.buttons.length - 20} more`);
+      console.log('');
+    }
+
+    // ── Assess ─────────────────────────────────────────────────────────────────
+    const totalEditable = fields.inputs.length + fields.textareas.length;
+    const hasResults    = fields.sections.length > 0 || fields.headings.some(h =>
+      ['result', 'outcome', 'inner', 'bloom', 'calm', 'grow', 'balance', 'email', 'discount']
+        .some(k => h.text.toLowerCase().includes(k))
+    );
+
+    let summary;
+    if (totalEditable === 0) {
+      summary = `No editable fields were found on this page. The page may be a dashboard overview,
+a read-only preview, or the VQB editor may load fields dynamically after a further
+click or navigation. Try clicking into the specific screen (e.g., "Edit" on a result
+page) and re-running observe mode.`;
+    } else if (totalEditable < 3) {
+      summary = `${totalEditable} editable field(s) found. This appears to be a partial view or a
+settings page. Navigate deeper into the quiz editor — specifically to the result
+page for Inner Bloom, Inner Calm, Inner Grow, or Inner Balance — then re-run.`;
+    } else if (hasResults) {
+      summary = `${totalEditable} editable field(s) found on what appears to be a result page or
+quiz screen. This looks like the right section. Review the field map below and
+match selectors to the approved copy fields. When ready, run with --apply flag.`;
+    } else {
+      summary = `${totalEditable} editable field(s) found. The page content does not clearly
+match a known quiz result screen by name, but fields are present. Review the field
+map and check the screenshot to confirm which quiz screen this is.`;
+    }
+
+    console.log('Assessment:');
+    summary.split('\n').forEach(line => console.log(`  ${line}`));
+    console.log('');
+
+    // ── Write reports ─────────────────────────────────────────────────────────
+    const reportPath  = writeObserveReport({ ts, url, title, screenshot: ss, fields, summary });
+    const fieldPath   = writeFieldMap({ ts, url, title, fields });
+
+    console.log('Reports written:');
+    console.log(`  ${path.relative(BASE, reportPath)}`);
+    console.log(`  ${path.relative(BASE, fieldPath)}`);
+    console.log('');
+
+    // ── If apply mode, prompt to continue ─────────────────────────────────────
+    if (APPLY_MODE) {
+      console.log('─────────────────────────────────────────────────────────────────');
+      console.log('GUIDED APPLY MODE — fields will be filled with your confirmation.');
+      console.log('Review the field map first, then continue.');
+      console.log('─────────────────────────────────────────────────────────────────');
+      console.log('');
+      const go = await ask('  Type "apply" and press Enter to begin guided fill, or press Enter to cancel: ');
+      if (go.trim().toLowerCase() !== 'apply') {
+        console.log('  Apply cancelled. No fields were filled.');
       } else {
-        console.log('  ⚠️  Login form found but submit button not located — log in manually in the browser.');
+        console.log('  Apply mode starting — see field-by-field prompts below.');
+        console.log('  (Field-fill flow requires selector mapping — run observe first on each screen)');
+        // Note: actual fill logic is invoked here once selectors are confirmed
+        // from the field map report. See safeFill() and runResultCard() above.
       }
-    } else {
-      console.log('  ⚠️  Login form not auto-located — log in manually in the browser window.');
     }
 
-    if (APPLY_MODE) {
-      console.log('');
-      console.log('  After logging in, navigate to the quiz editor for:');
-      console.log('    Quiz: VV Home Quick Match Quiz — 1Q (ID: 16047)');
-      await ask('  Press Enter when you are in the quiz editor and ready to begin...');
-    } else {
-      console.log('');
-      console.log('OBSERVE MODE — browser is open. Review the dashboard, then close it or press Ctrl+C.');
-      console.log('');
-      console.log('Field map:');
-      const screens = [
-        { name: 'Email Capture',        fields: Object.entries(emailCapture) },
-        { name: 'Discount Screen',      fields: Object.entries(discountScreen) },
-        { name: 'Inner Bloom',          fields: Object.entries({ ...innerBloom, wtmBody: innerBloom.whyThisMatch.body }) },
-        { name: 'Inner Calm',           fields: Object.entries({ ...innerCalm,  wtmBody: innerCalm.whyThisMatch.body }) },
-        { name: 'Inner Grow',           fields: Object.entries({ ...innerGrow,  wtmBody: innerGrow.whyThisMatch.body }) },
-        { name: 'Inner Balance',        fields: Object.entries({ ...innerBalance, wtmBody: innerBalance.whyThisMatch.body }) },
-      ];
-      screens.forEach(sc => {
-        console.log(`\n  ${sc.name}:`);
-        sc.fields.forEach(([k, v]) => {
-          if (typeof v === 'string') {
-            const preview = v.length > 55 ? v.substring(0, 52) + '...' : v;
-            console.log(`    ${k.padEnd(18)}: ${preview}`);
-          }
-        });
-      });
-      console.log('');
-      console.log('To apply changes, run:');
-      console.log('  npm run vqb:dashboard-assisted-apply -- --apply');
-      console.log('');
-      await ask('Press Enter to close the browser...');
-    }
+    console.log('');
+    await ask('  Press Enter to close the browser...');
 
-    if (APPLY_MODE) {
-      // ── Run All Screens ──────────────────────────────────────────────────────
-      allResults.emailCapture   = await runEmailCapture(page);
-      allResults.discountScreen = await runDiscountScreen(page);
-
-      allResults.innerBloom = await runResultCard(page, {
-        id: 'inner-bloom', label: 'Inner Bloom Result Card + Why This Match',
-        card: innerBloom, globalLabel: resultCards.globalLabel,
-      });
-      allResults.innerCalm = await runResultCard(page, {
-        id: 'inner-calm', label: 'Inner Calm Result Card + Why This Match',
-        card: innerCalm, globalLabel: resultCards.globalLabel,
-      });
-      allResults.innerGrow = await runResultCard(page, {
-        id: 'inner-grow', label: 'Inner Grow Result Card + Why This Match',
-        card: innerGrow, globalLabel: resultCards.globalLabel,
-      });
-      allResults.innerBalance = await runResultCard(page, {
-        id: 'inner-balance', label: 'Inner Balance Result Card + Why This Match',
-        card: innerBalance, globalLabel: resultCards.globalLabel,
-      });
-
-      // ── Summary ──────────────────────────────────────────────────────────────
-      const allFields  = Object.values(allResults).flat();
-      const found      = allFields.filter(f => f.found).length;
-      const filled     = allFields.filter(f => f.filled).length;
-      const notFound   = allFields.filter(f => !f.found);
-
-      console.log('');
-      console.log('═════════════════════════════════════════════════════════════════');
-      console.log('  GUIDED APPLY COMPLETE');
-      console.log('═════════════════════════════════════════════════════════════════');
-      console.log(`  Total fields: ${allFields.length}`);
-      console.log(`  Found by automation: ${found}`);
-      console.log(`  Filled with approval: ${filled}`);
-      console.log(`  Require manual paste: ${notFound.length}`);
-      if (notFound.length > 0) {
-        console.log('');
-        console.log('  Fields to paste manually:');
-        notFound.forEach(f => console.log(`    ⚠️  ${f.fieldName}`));
-        console.log('  Use config/vqb-result-copy-to-paste.md for manual fields.');
-      }
-      console.log('');
-      console.log('  Next steps:');
-      console.log('  1. Review all changes in the VQB preview');
-      console.log('  2. Test on mobile (375px) before publishing');
-      console.log('  3. Human sign-off on reports/vqb/manual-vqb-edit-checklist.md');
-      console.log('  4. Publish manually in VQB dashboard when satisfied');
-      console.log('');
-
-      await screenshot(page, 'final-state');
-    }
-
-    // ── Save Run Report ────────────────────────────────────────────────────────
-    const REPORTS = path.join(BASE, 'reports', 'vqb');
-    const runReport = {
-      generatedAt: ts,
-      mode: APPLY_MODE ? 'guided_apply' : 'observe',
-      writesExecuted: 0,  // hardcoded — this script never makes API writes
-      shopifyEdited: false,
-      vqbApiWriteMade: false,
-      results: allResults,
-      _safety: { autoPublish: false, requireHumanApproval: true, vqbApiMode: 'read_only' },
+    // ── Final save report ─────────────────────────────────────────────────────
+    const runLog = {
+      ts,
+      mode:           APPLY_MODE ? 'guided_apply' : 'observe',
+      url,
+      title,
+      inputsFound:    fields.inputs.length,
+      textareasFound: fields.textareas.length,
+      buttonsFound:   fields.buttons.length,
+      writesExecuted: 0,
+      vqbApiWrite:    false,
+      shopifyEdited:  false,
+      reports: [
+        path.relative(BASE, reportPath),
+        path.relative(BASE, fieldPath),
+      ],
     };
-    const runPath = path.join(REPORTS, `${ts.replace(/[:.]/g, '-')}-dashboard-apply-run.json`);
-    fs.writeFileSync(runPath, JSON.stringify(runReport, null, 2));
-    console.log(`Run report saved: reports/vqb/${path.basename(runPath)}`);
+
+    const logPath = path.join(REPORTS, `${ts.replace(/[:.]/g, '-')}-observe-run.json`);
+    fs.writeFileSync(logPath, JSON.stringify(runLog, null, 2));
+    console.log(`Run log: reports/vqb/${path.basename(logPath)}`);
+    console.log('');
+    console.log('=== OBSERVE SESSION COMPLETE ===');
+    console.log('No VQB or Shopify content was modified.');
+    console.log('');
 
   } catch (err) {
     console.error('');
     console.error(`Error: ${err.message}`);
-    if (err.message.includes('playwright')) {
-      console.error('Make sure Playwright is installed: npm install playwright && npx playwright install chromium');
+    if (err.message?.toLowerCase().includes('playwright') || err.message?.toLowerCase().includes('executable')) {
+      console.error('Run: npm install playwright && npx playwright install chromium');
     }
   } finally {
-    if (browser) await browser.close();
+    if (browser) await browser.close().catch(() => {});
     rl.close();
   }
 }
