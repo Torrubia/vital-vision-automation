@@ -18,7 +18,14 @@
     "vqb:diagnose-auth": "node scripts/vqb/diagnose-vqb-auth.js",
     "vqb:dashboard-plan": "node scripts/vqb/generate-dashboard-plan.js",
     "vqb:dashboard-dry-run": "node scripts/vqb/vqb-dashboard-automation-dry-run.js",
-    "vqb:dashboard-assisted-apply": "node scripts/vqb/vqb-dashboard-apply-assisted.js"
+    "vqb:dashboard-assisted-apply": "node scripts/vqb/vqb-dashboard-apply-assisted.js",
+    "vqb:print-fix-pack": "node scripts/vqb/print-vqb-fix-pack.js",
+    "shopify:product-seo-report": "node scripts/shopify/update-product-seo.js",
+    "shopify:product-seo-apply": "node scripts/shopify/update-product-seo.js --apply",
+    "seo:check-copy": "node scripts/seo/check-seo-copy-compliance.js",
+    "result:check-copy": "node scripts/seo/check-result-page-compliance.js",
+    "pagefly:observe": "node scripts/pagefly/observe-pagefly-editor.js",
+    "pagefly:apply-hero": "node scripts/pagefly/apply-hero-sections.js"
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
