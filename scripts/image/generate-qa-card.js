@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * Vital Vision Shop — Q&A Card Generator v3
+ * Vital Vision Shop — Q&A Card Generator v4
  * Generates a premium branded Instagram Story Q&A card as a local PNG draft.
  *
  * Rules:
@@ -14,7 +14,7 @@
  *   node scripts/image/generate-qa-card.js
  *
  * Output:
- *   assets/generated/qa-cards/test-inner-bloom-qa-story-v3.png
+ *   assets/generated/qa-cards/test-inner-bloom-qa-story-v4.png
  */
 
 const sharp = require('sharp');
@@ -22,13 +22,13 @@ const path  = require('path');
 const fs    = require('fs');
 
 // ---------------------------------------------------------------------------
-// Brand colours — v3 (deeper contrast, tighter layout)
+// Brand colours — v4
 // ---------------------------------------------------------------------------
 const C = {
   bg:             '#F7F0E3',  // warm cream background
   deepGreen:      '#173F2D',  // header block, CTA button
-  questionColor:  '#0B2B1C',  // darker for max question contrast
-  textGreen:      '#0F3020',  // body text (darker than v2)
+  questionColor:  '#0B2B1C',  // very dark forest — max question contrast
+  textGreen:      '#0F3020',  // body text (dark)
   gold:           '#C9A44C',  // primary gold accent
   sage:           '#D7DDC8',  // soft sage (pill bg, labels, decorative)
   answerCard:     '#FFF8EA',  // answer card background
@@ -166,7 +166,7 @@ function buildCardSVG() {
     size: 14, font: FONT.sans, color: C.deepGreen, weight: 'bold', tracking: 4,
   }));
 
-  // ── QUESTION — v3: larger (72px), darker colour ───────────────────────────
+  // ── QUESTION — 72px, darkest colour ──────────────────────────────────────
   const qSize  = 72;
   const qLineH = Math.round(qSize * 1.30);
   let qY = 425;
@@ -181,11 +181,11 @@ function buildCardSVG() {
   els.push(L(CX + 20, divY, 940, divY, C.gold, { sw: 1.3, opacity: 0.60 }));
   els.push(Diamond(CX, divY, 9, C.gold, 0.80));
 
-  // ── ANSWER CARD — v3: higher position, taller ────────────────────────────
+  // ── ANSWER CARD — v4: 31px body text, tighter card ───────────────────────
   const cardX  = 68;
-  const cardY  = divY + 28;   // was +44 in v2
+  const cardY  = divY + 28;
   const cardW  = 944;
-  const cardH  = 490;          // was 462 in v2
+  const cardH  = 460;   // reduced from 490 — 31px text fills it properly
   const cardRx = 20;
 
   // Shadow
@@ -200,12 +200,12 @@ function buildCardSVG() {
   // Thin rule under heading
   els.push(L(CX - 110, cardY + 57, CX + 110, cardY + 57, C.gold, { sw: 0.7, opacity: 0.40 }));
 
-  // Answer text lines
-  const aSize  = 27;
+  // Answer text lines — v4: 31px for mobile readability
+  const aSize  = 31;
   const aLineH = Math.round(aSize * 1.65);
-  let aY = cardY + 98;
+  let aY = cardY + 96;
   for (const { text: lineText, bold } of CARD.answerLines) {
-    if (lineText === '') { aY += Math.round(aLineH * 0.42); continue; }
+    if (lineText === '') { aY += Math.round(aLineH * 0.40); continue; }
     els.push(T(lineText, CX, aY, {
       size:   bold ? aSize + 1 : aSize,
       font:   FONT.sans,
@@ -221,7 +221,7 @@ function buildCardSVG() {
 
   // ── CTA BUTTON ───────────────────────────────────────────────────────────
   const btnX  = 96;
-  const btnY  = cardY + cardH + 42;  // was +50 in v2
+  const btnY  = cardY + cardH + 42;
   const btnW  = 888;
   const btnH  = 130;
   const btnRx = 32;
@@ -235,31 +235,31 @@ function buildCardSVG() {
   els.push(T(CARD.ctaMain, CX, btnY + 47, {
     size: 33, font: FONT.sans, color: C.gold, weight: 'bold', tracking: 2,
   }));
-  // "for the daily ritual."
+  // "for the daily ritual." — v4: 22px
   els.push(T(CARD.ctaSub, CX, btnY + 95, {
-    size: 20, font: FONT.sans, color: C.cream, opacity: 0.90,
+    size: 22, font: FONT.sans, color: C.cream, opacity: 0.92,
   }));
 
   // ── THREE-DOT SEPARATOR ───────────────────────────────────────────────────
-  const dotY = btnY + btnH + 46;   // was +62 in v2
+  const dotY = btnY + btnH + 46;
   els.push(Circle(CX - 22, dotY, 3.5, C.gold, 0.42));
   els.push(Circle(CX,      dotY, 3.5, C.gold, 0.80));
   els.push(Circle(CX + 22, dotY, 3.5, C.gold, 0.42));
 
-  // ── DISCLAIMER — v3: larger size, warmer readable colour ─────────────────
-  const disclaimerY = dotY + 42;   // was +54 in v2
+  // ── DISCLAIMER — 20px, readable warm green-grey ───────────────────────────
+  const disclaimerY = dotY + 42;
   els.push(T(CARD.disclaimer, CX, disclaimerY, {
     size: 20, font: FONT.sans, color: C.disclaimerText,
   }));
 
   // ── BOTTOM BOTANICAL CLUSTER ──────────────────────────────────────────────
-  const botY = disclaimerY + 65;   // was +100 in v2
+  const botY = disclaimerY + 55;   // tighter than v3
   els.push(`<ellipse cx="${CX}"       cy="${botY + 60}"  rx="130" ry="32" fill="${C.sage}" opacity="0.09" transform="rotate(0 ${CX} ${botY + 60})"/>`);
   els.push(`<ellipse cx="${CX - 195}" cy="${botY + 100}" rx="78"  ry="22" fill="${C.sage}" opacity="0.08" transform="rotate(22 ${CX - 195} ${botY + 100})"/>`);
   els.push(`<ellipse cx="${CX + 205}" cy="${botY + 100}" rx="78"  ry="22" fill="${C.sage}" opacity="0.08" transform="rotate(-22 ${CX + 205} ${botY + 100})"/>`);
 
   // Small decorative mark
-  const dMarkY = botY + 120;       // was +190 in v2
+  const dMarkY = botY + 100;
   els.push(Diamond(CX, dMarkY, 6, C.gold, 0.30));
   els.push(L(CX - 45, dMarkY, CX - 10, dMarkY, C.gold, { sw: 0.8, opacity: 0.22 }));
   els.push(L(CX + 10, dMarkY, CX + 45, dMarkY, C.gold, { sw: 0.8, opacity: 0.22 }));
@@ -283,11 +283,11 @@ function buildCardSVG() {
 // ---------------------------------------------------------------------------
 async function main() {
   const outputDir  = path.resolve(__dirname, '../../assets/generated/qa-cards');
-  const outputFile = path.join(outputDir, 'test-inner-bloom-qa-story-v3.png');
+  const outputFile = path.join(outputDir, 'test-inner-bloom-qa-story-v4.png');
 
   fs.mkdirSync(outputDir, { recursive: true });
 
-  console.log('Vital Vision Shop — Q&A Card Generator v3');
+  console.log('Vital Vision Shop — Q&A Card Generator v4');
   console.log('Product : Inner Bloom');
   console.log('Format  : Instagram Story 1080 × 1920');
   console.log('Design  : Premium wellness — deep green / gold / warm cream');
