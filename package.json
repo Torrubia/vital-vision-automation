@@ -30,7 +30,8 @@
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
     "dotenv": "^16.0.0",
-    "playwright": "^1.59.1"
+    "playwright": "^1.59.1",
+    "sharp": "^0.34.5"
   },
   "engines": {
     "node": ">=18.0.0"
