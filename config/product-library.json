@@ -1,0 +1,171 @@
+{
+  "schema_version": "1.0",
+  "brand": "Vital Vision Shop",
+  "last_updated": "2026-05-29",
+  "compliance_note": "All product copy is educational only. No medical claims. All language reviewed against FTC and FDA supplement guidelines.",
+  "products": [
+    {
+      "id": "inner-bloom",
+      "product_name": "Inner Bloom Advanced Probiotic Formula",
+      "short_name": "Inner Bloom",
+      "shopify_product_url": "/products/advanced-probiotic-formula",
+      "shopify_result_page_url": "/pages/inner-bloom-result",
+      "quiz_match_label": "Inner Bloom",
+      "primary_angle": "Digestive wellness and gut balance as part of a consistent daily self-care routine.",
+      "approved_bullets": [
+        "Designed to support daily digestive wellness",
+        "May support gut balance as part of a consistent self-care routine",
+        "Designed to support digestive comfort and overall wellness",
+        "A simple daily ritual for women who want more consistency around meals"
+      ],
+      "approved_cta": [
+        "Comment BLOOM for the routine.",
+        "Explore Inner Bloom.",
+        "Build your gut-support ritual.",
+        "Start your Inner Bloom ritual."
+      ],
+      "compliance_disclaimer": "Educational only. Not medical advice. Results may vary. These statements have not been evaluated by the Food and Drug Administration. This product is not intended to diagnose, treat, cure, or prevent any disease.",
+      "forbidden_claims": [
+        "cure",
+        "treat",
+        "prevent",
+        "diagnose",
+        "disease",
+        "bloating cure",
+        "IBS",
+        "irritable bowel",
+        "no more bloating",
+        "stop bloating",
+        "fix your gut",
+        "heal your stomach",
+        "eliminate gas",
+        "guaranteed comfort after meals"
+      ],
+      "image_status": "pending",
+      "image_todo": "Add approved product image to assets/images/inner-bloom/ when available. Do not use unverified imagery."
+    },
+    {
+      "id": "inner-calm",
+      "product_name": "Inner Calm Magnesium Glycinate",
+      "short_name": "Inner Calm",
+      "shopify_product_url": "/products/inner-calm-magnesium-glycinate",
+      "shopify_result_page_url": "/pages/inner-calm-result",
+      "quiz_match_label": "Inner Calm",
+      "primary_angle": "Calm routine, evening ritual, and relaxation support as part of a consistent self-care routine.",
+      "approved_bullets": [
+        "Designed to support a calm evening routine",
+        "May support relaxation as part of a daily wellness ritual",
+        "Designed to support daily balance and overall wellness",
+        "A simple evening self-care ritual for a more consistent routine"
+      ],
+      "approved_cta": [
+        "Comment CALM for the evening ritual.",
+        "Explore Inner Calm.",
+        "Save this for tonight's self-care routine.",
+        "Start your calm evening ritual."
+      ],
+      "compliance_disclaimer": "Educational only. Not medical advice. Results may vary. These statements have not been evaluated by the Food and Drug Administration. This product is not intended to diagnose, treat, cure, or prevent any disease.",
+      "forbidden_claims": [
+        "cure",
+        "treat",
+        "prevent",
+        "diagnose",
+        "disease",
+        "anxiety",
+        "depression",
+        "insomnia",
+        "stress treatment",
+        "sleep disorder",
+        "guaranteed sleep",
+        "fix stress",
+        "treat insomnia",
+        "calm your nervous system",
+        "mental health claims",
+        "medical outcomes"
+      ],
+      "image_status": "pending",
+      "image_todo": "Add approved product image to assets/images/inner-calm/ when available. Do not use unverified imagery."
+    },
+    {
+      "id": "inner-grow",
+      "product_name": "Inner Grow Hair Skin and Nails Support",
+      "short_name": "Inner Grow",
+      "shopify_product_url": "/products/inner-grow-hair-skin-and-nails-support",
+      "shopify_result_page_url": "/pages/inner-grow-result",
+      "quiz_match_label": "Inner Grow",
+      "primary_angle": "Beauty-from-within \u2014 hair, skin, and nail wellness as part of a simple daily beauty ritual.",
+      "approved_bullets": [
+        "Designed to support hair, skin, and nail wellness",
+        "May support beauty wellness as part of a consistent daily routine",
+        "Designed to support a simple beauty-from-within ritual",
+        "A daily foundation for women who want inside-out beauty support"
+      ],
+      "approved_cta": [
+        "Comment GROW for the beauty ritual.",
+        "Explore Inner Grow.",
+        "Start your beauty from within routine.",
+        "Save this for your daily beauty ritual."
+      ],
+      "compliance_disclaimer": "Educational only. Not medical advice. Results may vary. These statements have not been evaluated by the Food and Drug Administration. This product is not intended to diagnose, treat, cure, or prevent any disease.",
+      "forbidden_claims": [
+        "cure",
+        "treat",
+        "prevent",
+        "diagnose",
+        "disease",
+        "hair loss treatment",
+        "stop hair loss",
+        "grow hair fast",
+        "acne treatment",
+        "clear acne",
+        "anti-aging cure",
+        "reverse aging",
+        "hormonal claims",
+        "fix brittle nails",
+        "guaranteed beauty results",
+        "medical outcomes"
+      ],
+      "image_status": "pending",
+      "image_todo": "Add approved product image to assets/images/inner-grow/ when available. Do not use unverified imagery."
+    },
+    {
+      "id": "inner-balance",
+      "product_name": "Inner Balance Complete Multivitamin",
+      "short_name": "Inner Balance",
+      "shopify_product_url": "/products/inner-balance-complete-multivitamin",
+      "shopify_result_page_url": "/pages/inner-balance-result",
+      "quiz_match_label": "Inner Balance",
+      "primary_angle": "Daily wellness foundation \u2014 morning routine, balance, and everyday support as part of a consistent self-care ritual.",
+      "approved_bullets": [
+        "Designed to support daily wellness and overall wellbeing",
+        "May support a consistent self-care routine as a daily foundation",
+        "Designed to support everyday balance without complication",
+        "A simple one-step daily wellness ritual for women who want consistency"
+      ],
+      "approved_cta": [
+        "Comment BALANCE for the daily ritual.",
+        "Explore Inner Balance.",
+        "Start with one simple daily wellness step.",
+        "Save this for your daily routine."
+      ],
+      "compliance_disclaimer": "Educational only. Not medical advice. Results may vary. These statements have not been evaluated by the Food and Drug Administration. This product is not intended to diagnose, treat, cure, or prevent any disease.",
+      "forbidden_claims": [
+        "cure",
+        "treat",
+        "prevent",
+        "diagnose",
+        "disease",
+        "disease prevention",
+        "deficiency treatment",
+        "immune disease",
+        "fix fatigue",
+        "boost immunity guaranteed",
+        "replace a balanced diet",
+        "works for everyone",
+        "medical outcomes"
+      ],
+      "image_status": "pending",
+      "image_todo": "Add approved product image to assets/images/inner-balance/ when available. Do not use unverified imagery."
+    }
+  ]
+}
