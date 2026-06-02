@@ -14,3 +14,15 @@ backups/
 !assets/prompts/.gitkeep
 !reports/vqb/.gitkeep
 !reports/vqb/*.md
+
+# Claude / Antigravity local permissions
+.claude/settings.local.json
+
+# Secrets and credentials
+secrets/
+*service-account*.json
+*credentials*.json
+*secret*.json
+*token*.json
+*.pem
+*.key
