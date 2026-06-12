@@ -1,0 +1,59 @@
+# Environment variables and secrets
+.env
+.env.local
+.env.production
+.env.development
+*.env
+
+# API keys and tokens
+*token*
+*secret*
+*apikey*
+*api-key*
+credentials.json
+service-account.json
+
+# n8n local data
+.n8n/
+n8n_data/
+docker_n8n/
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal
+
+# Logs
+*.log
+logs/*.log
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Node / package folders
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Build outputs
+dist/
+build/
+.cache/
+.tmp/
+temp/
+
+# Local editor files
+.vscode/settings.json
+.idea/
+
+# Large exports
+exports/
+*.zip
+*.mp4
+*.mov
+*.psd
+*.ai
+
+# Do not ignore documentation folders
+!vital-vision-system/logs/
+!vital-vision-system/logs/*.md
