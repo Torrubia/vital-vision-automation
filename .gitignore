@@ -1,28 +1,35 @@
+# Environment / secrets
 .env
-logs/
-.DS_Store
-node_modules/
-
-# Generated output — runtime artifacts, not source code
-assets/generated/*
-assets/prompts/*
-reports/vqb/*
-# VQB backups — pre-write quiz state snapshots, never commit
-backups/
-# Keep planning docs and placeholder files — gitignore excludes only runtime output
-!assets/generated/.gitkeep
-!assets/prompts/.gitkeep
-!reports/vqb/.gitkeep
-!reports/vqb/*.md
-
-# Claude / Antigravity local permissions
-.claude/settings.local.json
-
-# Secrets and credentials
-secrets/
-*service-account*.json
-*credentials*.json
-*secret*.json
-*token*.json
+.env.*
+*.env
 *.pem
-*.key
+*token*
+*secret*
+*apikey*
+*api-key*
+credentials.json
+service-account.json
+
+# Mac
+.DS_Store
+
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Logs / temp
+logs/
+*.log
+tmp/
+temp/
+
+# Generated / private outputs
+reports/
+exports/
+backups/
+assets/personal-reference/
+
+# Claude local
+.claude/settings.local.json
