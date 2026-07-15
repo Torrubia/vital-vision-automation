@@ -195,3 +195,70 @@ When helping Lucy, use:
 3. Validation checklist
 4. Risks and limits
 5. Plan B
+
+---
+
+## Supliful Label Ops Module
+
+All Supliful label work — reviewing migrated labels, creating new labels, validating compliance, planning API integration, and syncing with Shopify — must use:
+
+```
+vital-vision-system/supliful-label-ops/
+```
+
+### When Lucy mentions Supliful labels, direct her to:
+
+- **Review a migrated label:** `workflows/01-review-migrated-label.md`
+- **Create a new label:** `workflows/02-create-new-label-from-product.md`
+- **Save a label (approval gate):** `workflows/03-supliful-label-save-approval.md`
+- **Sync with Shopify:** `workflows/04-shopify-product-sync-review.md`
+- **API planning:** `workflows/05-api-safe-mode-workflow.md`
+- **Review all 4 products:** `workflows/06-label-batch-review.md`
+- **Something went wrong:** `workflows/07-rollback-and-incident-response.md`
+
+### Quick review prompt:
+
+Use `supliful-label-ops/prompts/master-label-orchestrator-prompt.md` to review any label screenshot.
+
+### Safety rules specific to label ops:
+
+- Never click Save in Supliful without completing `checklists/save-label-approval-checklist.md`.
+- Never make API write calls without a completed `templates/api-action-request-template.md` and Lucy's explicit approval.
+- Never use forbidden claims: "cures," "treats," "prevents disease," "heals," "diagnoses," "guarantees results."
+- Always use safe language: "supports," "helps support," "may help support," "helps maintain."
+- All label save actions must be logged in `supliful-label-ops/logs/`.
+
+---
+
+## Premium Label Architecture and Design System
+
+All label design, analysis, and redesign work uses the design system inside `supliful-label-ops/`.
+
+### When Lucy asks about label design, direct her to:
+
+- **Analyze an existing label:** `prompts/current-label-analysis-prompt.md` → Workflow 08
+- **Create a new premium label:** `prompts/new-premium-label-creation-prompt.md` → Workflow 09
+- **Build the Master Label Standard:** `prompts/master-label-standard-prompt.md` → Workflow 10
+- **Compare Inner Bloom vs Inner Grow (or any two labels):** `prompts/product-line-comparison-prompt.md` → Workflow 11
+- **Build a label inside Supliful:** `prompts/supliful-dashboard-build-prompt.md` → Workflow 12
+- **Get premium feel direction:** `prompts/luxury-packaging-director-prompt.md`
+
+### Use the skill for all design tasks:
+
+```
+/vv-premium-label-architect [product] [action]
+```
+
+### Design system agents (new):
+
+- `premium-label-architect.md` — layout specification
+- `luxury-packaging-director.md` — creative direction
+- `label-design-system-manager.md` — Master Label Standard
+- `label-consistency-reviewer.md` — family consistency
+- `supliful-dashboard-design-operator.md` — Supliful build guide
+- `premium-label-qa-reviewer.md` — final READY / REVISE / ESCALATE
+
+### Design policy:
+
+Before any redesign: `DESIGN_PRESERVATION_AND_REDESIGN_POLICY.md`
+Preserve what works. Never redesign randomly. Human approval always required for save actions.

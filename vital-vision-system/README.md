@@ -111,3 +111,27 @@ Prepare content for Meta Business Suite, Pinterest, TikTok, YouTube Shorts, and 
 ### Phase 5 — Growth Optimization
 
 Track performance, update content strategy, improve offers, and build repeatable organic growth loops.
+
+---
+
+## Supliful Label Ops
+
+Label management for Vital Vision Shop's Supliful supplement products is handled by a dedicated module:
+
+```
+vital-vision-system/supliful-label-ops/
+```
+
+This module provides workflows, checklists, prompts, templates, and API planning for:
+
+- Reviewing migrated Supliful labels before saving
+- Creating new product labels with compliance review
+- Human approval gates before any label save action
+- Shopify product sync review
+- Safe, phased API integration planning
+- Batch review of all four products
+- Rollback and incident response
+
+Products covered: Inner Balance, Inner Bloom, Inner Calm, Inner Grow.
+
+Start here for any label work: `supliful-label-ops/README.md`

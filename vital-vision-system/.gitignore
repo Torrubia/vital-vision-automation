@@ -57,3 +57,29 @@ exports/
 # Do not ignore documentation folders
 !vital-vision-system/logs/
 !vital-vision-system/logs/*.md
+
+# Generated output — runtime artifacts, not source code
+assets/generated/*
+assets/prompts/*
+reports/vqb/*
+# VQB backups — pre-write quiz state snapshots, never commit
+backups/
+# Keep planning docs and placeholder files — gitignore excludes only runtime output
+!assets/generated/.gitkeep
+!assets/prompts/.gitkeep
+!reports/vqb/.gitkeep
+!reports/vqb/*.md
+
+# Claude / Antigravity local permissions
+.claude/settings.local.json
+
+# Secrets and credentials
+secrets/
+*service-account*.json
+*credentials*.json
+*secret*.json
+*token*.json
+*.pem
+*.key
+
+git check-ignore .env

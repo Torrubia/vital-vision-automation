@@ -1,0 +1,20 @@
+VITAL VISION — IMAGE PLACEHOLDER
+==================================
+
+Product:    Inner Calm
+Platform:   Instagram Feed
+Dimensions: 1080x1080
+Timestamp:  2026-05-03T14-17-14-272Z
+
+PROMPT:
+Soft overhead flat lay. Inner Calm supplement bottle centered on warm linen surface. Small glass of water to the left. Folded journal to the right. One dried sprig nearby. Warm natural light from the left. Calm, intentional, minimal. Color palette: warm off-white, sage green, soft amber. No harsh shadows. No text in image.
+
+STATUS: PLACEHOLDER ONLY — no image generated.
+To generate: set RUN_IMAGE_GENERATION=true in .env and re-run.
+
+SAFETY:
+  AUTO_PUBLISH=false
+  REQUIRE_HUMAN_APPROVAL=true
+  No API call was made.
+  No image was generated.
+  No image was uploaded or published.

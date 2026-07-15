@@ -1,0 +1,14 @@
+{
+  "timestamp": "2026-05-03T14-53-15-113Z",
+  "product": "Inner Calm",
+  "platform": "Instagram Feed",
+  "dimensions": "1080x1080",
+  "prompt": "Soft overhead flat lay. Inner Calm supplement bottle centered on warm linen surface. Small glass of water to the left. Folded journal to the right. One dried sprig nearby. Warm natural light from the left. Calm, intentional, minimal. Color palette: warm off-white, sage green, soft amber. No harsh shadows. No text in image.",
+  "complianceCheck": "No disease claims. No before/after. Lifestyle imagery only. No medical setting.",
+  "generationEnabled": true,
+  "apiKeyUsed": "EAAh4u*******************************************************************************************************************************************************************************************************************************************************************************************************************",
+  "model": "gemini-2.5-flash-image",
+  "autoPublish": false,
+  "requireHumanApproval": true,
+  "status": "generation_attempted"
+}
