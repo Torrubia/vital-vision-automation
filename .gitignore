@@ -33,3 +33,14 @@ assets/personal-reference/
 
 # Claude local
 .claude/settings.local.json
+
+# SQLite databases (n8n and other local DBs — never commit)
+*.sqlite
+*.sqlite-wal
+*.sqlite-shm
+*.sql.dump
+*-backup.sql
+
+# n8n infrastructure secrets and exports
+infrastructure/n8n/.env
+infrastructure/n8n/backups/

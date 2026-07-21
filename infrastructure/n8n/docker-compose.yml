@@ -1,0 +1,36 @@
+services:
+  n8n:
+    image: docker.n8n.io/n8nio/n8n:2.23.2
+    container_name: vital-vision-n8n
+    restart: unless-stopped
+    ports:
+      - "5678:5678"
+    env_file:
+      - .env
+    environment:
+      # Timezone
+      - GENERIC_TIMEZONE=${GENERIC_TIMEZONE:-America/New_York}
+      - TZ=${TZ:-America/New_York}
+      # n8n host config
+      - N8N_HOST=${N8N_HOST:-localhost}
+      - N8N_PORT=5678
+      - N8N_PROTOCOL=${N8N_PROTOCOL:-http}
+      # Security: disable secure-cookie for local HTTP access
+      - N8N_SECURE_COOKIE=false
+      # Logging
+      - N8N_LOG_LEVEL=${N8N_LOG_LEVEL:-info}
+      # Encryption key is read automatically from the volume config at
+      # /home/node/.n8n/config — do not override here unless migrating.
+      # To set explicitly: N8N_ENCRYPTION_KEY (via .env only, never commit).
+    volumes:
+      - n8n_data:/home/node/.n8n
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:5678/healthz || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+volumes:
+  n8n_data:
+    external: true
