@@ -114,7 +114,7 @@ Use these phrases. Do not deviate into medical or outcome-guarantee language.
 | Google Ads Wellness Quiz (5Q) | finder-quiz-15203 | Paid traffic only |
 
 For organic content, always link to the homepage quiz:
-https://www.vitalvision.shop/#finder-quiz-16047
+https://www.vitalvision.shop/pages/vital-vision-wellness-quiz
 
 ---
 

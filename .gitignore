@@ -44,3 +44,7 @@ assets/personal-reference/
 # n8n infrastructure secrets and exports
 infrastructure/n8n/.env
 infrastructure/n8n/backups/
+
+# Allow example/template env files (contain no real secrets)
+!.env.example
+!*.env.example
