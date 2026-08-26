@@ -1,5 +1,5 @@
-# VQB Mobile UX Checklist — Vital Vision Shop
-# Complete this checklist before approving any VQB result flow change.
+# Mobile UX Checklist — Vital Vision Shop
+# Complete this checklist before approving any quiz result flow change.
 # PLANNING DOCUMENT — No changes have been made.
 
 ---
@@ -112,9 +112,8 @@
 - [ ] All screens tested on iPhone SE (375px)
 - [ ] All screens tested on iPhone 14 (390px)
 - [ ] Compliance review completed
-- [ ] Human has reviewed all copy in config/vqb-result-page-copy.md
 - [ ] Human has reviewed result-page-redesign-audit.md priority list
-- [ ] Human approves VQB changes before publishing
+- [ ] Human approves quiz result page changes before publishing
 - [ ] `AUTO_PUBLISH=false` confirmed
 - [ ] `REQUIRE_HUMAN_APPROVAL=true` confirmed
 

@@ -1,4 +1,4 @@
-# VQB to PageFly Result Page Strategy
+# Quiz Result Page Strategy — Vital Vision Shop
 # Vital Vision Shop
 # Generated: 2026-05-11
 # Status: STRATEGY ONLY — no live changes made

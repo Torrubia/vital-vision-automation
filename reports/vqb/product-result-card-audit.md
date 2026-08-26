@@ -1,6 +1,6 @@
-# VQB Product Result Card Audit — Vital Vision Shop
-# PLANNING DOCUMENT — No changes have been made to VQB or Shopify.
-# AUTO_PUBLISH=false | REQUIRE_HUMAN_APPROVAL=true | VQB_API_MODE=read_only
+# Product Result Card Audit — Vital Vision Shop
+# CRO/UX intelligence for quiz result pages — applies to new native Shopify quiz.
+# AUTO_PUBLISH=false | REQUIRE_HUMAN_APPROVAL=true
 
 Date: 2026-05-04
 

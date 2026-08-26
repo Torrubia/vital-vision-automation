@@ -1,4 +1,4 @@
-# Approval Needed Before Live — PageFly Result Pages
+# Approval Needed Before Live — Quiz Result Pages
 # Vital Vision Shop
 # Generated: 2026-05-11
 # Status: APPROVAL GATE — nothing has been published
@@ -14,7 +14,7 @@ Read-only, local, or planning actions. No live system affected.
 | Run `npm run result:check-copy` | Terminal | YES |
 | Review all drafts in `drafts/pagefly/` | Local files | YES |
 | Review `reports/vqb/result-page-strategy.md` | Local file | YES |
-| Review `reports/vqb/vqb-to-pagefly-routing-plan.md` | Local file | YES |
+| Review result page routing plan | Local file | YES |
 | Review `drafts/pagefly/result-page-layout-template.md` | Local file | YES |
 | Run PageSpeed Insights on existing pages | External tool | YES |
 | Review current VQB result cards (read-only) | VQB dashboard | YES |
@@ -40,21 +40,20 @@ No script can do this. Requires human login to Shopify and PageFly.
 
 ---
 
-## TIER 3 — Requires VQB Access (Human Action)
+## TIER 3 — Requires Shopify Quiz Routing (Human Action)
 
-No script can do this. Requires human login to VQB dashboard.
+No script can do this. Requires human access to the native Shopify quiz configuration.
 
-| Action | Where in VQB | Risk |
+| Action | Where | Risk |
 |---|---|---|
-| Note current CTA URL on each result card | Result Pages → card → CTA field | ZERO — read-only |
-| Screenshot current VQB result card CTA values | Browser | ZERO |
-| Update Inner Bloom CTA URL to point to PageFly page | Result Pages → Inner Bloom → Primary CTA URL | MEDIUM — changes quiz flow for this card |
-| Save (NOT Save & Publish) after CTA update | VQB Save button | LOW — saves draft only |
-| Test full quiz flow after CTA update | Take quiz → answer → confirm redirect | ZERO RISK |
-| Publish updated VQB quiz | VQB → Save & Publish | HIGH — goes live for all quiz users |
+| Verify quiz answer → product result page routing | Shopify quiz page settings | ZERO — read-only |
+| Screenshot current quiz routing configuration | Browser | ZERO |
+| Update quiz answer routing to point to result page | Shopify quiz settings | MEDIUM — changes quiz flow |
+| Test full quiz flow after routing update | Take quiz → answer → confirm redirect | ZERO RISK |
+| Publish updated quiz routing | Shopify admin → Save | HIGH — goes live for all quiz users |
 
-**Do not update VQB CTA until the PageFly page is confirmed live and tested.**
-**Do not Save & Publish in VQB until human sign-off is complete.**
+**Do not update quiz routing until the result page is confirmed live and tested.**
+**Do not publish quiz routing change until human sign-off is complete.**
 
 ---
 
@@ -77,8 +76,8 @@ These require Shopify API write scope which is not yet enabled.
 | Action | Why |
 |---|---|
 | Publishing a PageFly page | Goes live immediately — requires human review first |
-| Clicking Save & Publish in VQB | Updates live quiz for all users — irreversible without manual rollback |
-| Changing VQB quiz answer → result card mappings | Changes which product customers see — financial + compliance impact |
+| Publishing quiz routing changes | Updates live quiz for all users — irreversible without manual rollback |
+| Changing quiz answer → result page mappings | Changes which product customers see — financial + compliance impact |
 | Deleting any result page after routing is active | Breaks quiz flow — sends customers to 404 |
 | Changing product prices or variants | Financial impact |
 | Modifying Shopify policy pages | Legal documents |
@@ -104,10 +103,10 @@ Complete before publishing any result page or changing VQB routing.
 | Noindex setting confirmed | [ ] |
 | Human sign-off to publish PageFly page | [ ] YES / NO |
 | PageFly page published and verified live | [ ] |
-| VQB CTA screenshot taken (before change) | [ ] |
-| VQB CTA updated to point to result page | [ ] |
+| Quiz routing screenshot taken (before change) | [ ] |
+| Quiz routing updated to point to result page | [ ] |
 | Full quiz flow tested end-to-end | [ ] |
-| Human sign-off to Save & Publish in VQB | [ ] YES / NO |
+| Human sign-off to publish quiz routing change | [ ] YES / NO |
 
 **Do not proceed to Inner Calm until Inner Bloom is complete and stable.**
 
@@ -123,7 +122,6 @@ Complete before publishing any result page or changing VQB routing.
 
 ---
 
-*No PageFly pages have been created.*
-*No VQB routing has been changed.*
-*No Shopify pages have been published.*
+*No Shopify result pages have been published.*
+*No quiz routing has been changed.*
 *This is a planning and approval gate document only.*

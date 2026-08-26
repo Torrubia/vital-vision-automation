@@ -115,7 +115,7 @@ Check what a user sees without scrolling at 375px.
 | 7.4 | "Why This Match" copy is specific to this product (not copy-pasted from another) | [ ] |
 | 7.5 | Routine steps are appropriate for this product (morning vs evening) | [ ] |
 | 7.6 | FAQ answers reference the correct product name | [ ] |
-| 7.7 | VQB routing delivers the customer to the correct result page | [ ] |
+| 7.7 | Quiz routing delivers the customer to the correct result page | [ ] |
 
 ---
 
@@ -146,7 +146,7 @@ Complete this block for each result page before publishing.
 | Tested on real iPhone device | [ ] |
 | Compliance scan passed | [ ] |
 | CTA links to correct product page | [ ] |
-| VQB routing tested | [ ] |
+| Quiz routing tested | [ ] |
 | Human reviewer | _______________ |
 | Date approved | _______________ |
 | Approved to publish | YES / NO |
@@ -161,7 +161,7 @@ Complete this block for each result page before publishing.
 | Tested on real iPhone device | [ ] |
 | Compliance scan passed | [ ] |
 | CTA links to correct product page | [ ] |
-| VQB routing tested | [ ] |
+| Quiz routing tested | [ ] |
 | Human reviewer | _______________ |
 | Date approved | _______________ |
 | Approved to publish | YES / NO |
@@ -176,7 +176,7 @@ Complete this block for each result page before publishing.
 | Tested on real iPhone device | [ ] |
 | Compliance scan passed | [ ] |
 | CTA links to correct product page | [ ] |
-| VQB routing tested | [ ] |
+| Quiz routing tested | [ ] |
 | Human reviewer | _______________ |
 | Date approved | _______________ |
 | Approved to publish | YES / NO |
@@ -191,7 +191,7 @@ Complete this block for each result page before publishing.
 | Tested on real iPhone device | [ ] |
 | Compliance scan passed | [ ] |
 | CTA links to correct product page | [ ] |
-| VQB routing tested | [ ] |
+| Quiz routing tested | [ ] |
 | Human reviewer | _______________ |
 | Date approved | _______________ |
 | Approved to publish | YES / NO |

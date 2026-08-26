@@ -29,7 +29,7 @@ All output is saved as drafts. Nothing is published automatically.
 
 ## Outputs
 - Full draft in the correct output template (see below)
-- Saved to: automations/drafts/YYYY-MM-DD-[content-type]-quiz-funnel.md
+- Saved to: content/drafts/YYYY-MM-DD-[content-type]-quiz-funnel.md
 - Compliance check included
 - Human approval status: Draft only
 
@@ -37,11 +37,10 @@ All output is saved as drafts. Nothing is published automatically.
 
 ## Vital Vision Context
 
-### Quiz Map
-| Quiz | ID | URL | Use For |
-|---|---|---|---|
-| Home Quick Match (1Q) | finder-quiz-16047 | https://www.vitalvision.shop/#finder-quiz-16047 | All organic content |
-| Google Ads Wellness (5Q) | finder-quiz-15203 | https://www.vitalvision.shop/#finder-quiz-15203 | Paid traffic only — never use in organic |
+### Quiz
+| Quiz | URL | Use For |
+|---|---|---|
+| Vital Vision Wellness Quiz | https://vitalvision.shop/pages/vital-vision-wellness-quiz | All organic content |
 
 ### Quiz Flow (1Q — Organic)
 Question: "How are you feeling most days lately?"
@@ -69,7 +68,6 @@ Premium, calm, modern, trustworthy. Speak to feeling and ritual — not symptoms
 
 ## Safety and Compliance Rules
 
-- Never use the paid quiz URL (finder-quiz-15203) in organic content
 - Quiz-driver copy may reference how someone *feels* but never name a medical condition
 - "Tired," "overwhelmed," "off" are lifestyle feelings — compliant
 - "Anxiety disorder," "insomnia," "IBS" as conditions being targeted — not compliant
@@ -85,7 +83,7 @@ Premium, calm, modern, trustworthy. Speak to feeling and ritual — not symptoms
 ```
 ---
 DRAFT — NOT APPROVED FOR PUBLISHING
-File: automations/drafts/[filename]
+File: content/drafts/[filename]
 Date: [YYYY-MM-DD]
 Content Type: Quiz-driver caption
 Platform: [Instagram / Facebook]
@@ -102,7 +100,7 @@ Speak to feeling, not diagnosis. Compliant language only.]
 
 ### CTA
 [Soft. Quiz link. "Link in bio."]
-https://www.vitalvision.shop/#finder-quiz-16047
+https://vitalvision.shop/pages/vital-vision-wellness-quiz
 
 ### Hashtags
 [10–15 relevant tags. No medical condition hashtags.]
@@ -111,7 +109,7 @@ https://www.vitalvision.shop/#finder-quiz-16047
 - [ ] No disease claims
 - [ ] No cure/treat/prevent language
 - [ ] No guaranteed results
-- [ ] Organic quiz URL used (not paid URL)
+- [ ] Quiz URL used: https://vitalvision.shop/pages/vital-vision-wellness-quiz
 - [ ] Results may vary included
 
 ### Human Approval Status
@@ -124,7 +122,7 @@ Draft only — not approved for publishing.
 ```
 ---
 DRAFT — NOT APPROVED FOR PUBLISHING
-File: automations/drafts/[filename]
+File: content/drafts/[filename]
 Date: [YYYY-MM-DD]
 Content Type: Story sequence — quiz funnel
 ---
@@ -146,13 +144,13 @@ Content Type: Story sequence — quiz funnel
 [One line connecting their answer to a personalized result.]
 
 ### Frame 5 — CTA
-[Soft action. Link sticker → https://www.vitalvision.shop/#finder-quiz-16047]
+[Soft action. Link sticker → https://vitalvision.shop/pages/vital-vision-wellness-quiz]
 [Micro-copy: "60 seconds · Free · Results may vary."]
 
 ### Compliance Check
 - [ ] No disease claims in any frame
 - [ ] No guaranteed outcome language
-- [ ] Organic quiz URL used
+- [ ] Quiz URL used: https://vitalvision.shop/pages/vital-vision-wellness-quiz
 - [ ] Results may vary on CTA frame
 
 ### Human Approval Status
@@ -165,7 +163,7 @@ Draft only — not approved for publishing.
 ```
 ---
 DRAFT — NOT APPROVED FOR PUBLISHING
-File: automations/drafts/[filename]
+File: content/drafts/[filename]
 Date: [YYYY-MM-DD]
 Content Type: Quiz result page copy
 Product: [Inner Calm / Inner Bloom / Inner Grow / Inner Balance]
@@ -212,10 +210,9 @@ Draft only — not approved for publishing.
 
 ## Validation Checklist
 
-- [ ] Organic quiz URL used throughout (finder-quiz-16047)
-- [ ] Paid URL (finder-quiz-15203) not present in any organic draft
+- [ ] Quiz URL used throughout: https://vitalvision.shop/pages/vital-vision-wellness-quiz
 - [ ] No disease claims, condition targeting, or guaranteed outcomes
 - [ ] "Results may vary" present on CTA frames and result pages
 - [ ] Persona voice matches Maya or Jordan as specified
-- [ ] Output saved to automations/drafts/
+- [ ] Output saved to content/drafts/
 - [ ] Human approval required before any content goes live
