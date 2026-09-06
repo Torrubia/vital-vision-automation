@@ -99,9 +99,15 @@ File naming:
 YYYY-MM-DD-[product]-[theme]-[card-type]-spec-draft.md
 ```
 
-### Step 5 — Human Builds the Card
+### Step 5 — Execute the Card Spec
 
+The approved card spec may be executed through either path:
+
+**Path A — Human/manual creation**
 Human operator takes the spec and builds in Canva (using templates in assets/templates/qa-cards/) or runs the Node/sharp script.
+
+**Path B — Canva MCP (where appropriate and explicitly allowed)**
+When Canva MCP is available and the operator chooses to use it, the spec may be used to direct Canva MCP execution. Canva MCP is an execution tool only — it does not replace Human Approval, creative direction, compliance review, or brand authority. All quality, compliance, and approval gates apply equally to both paths.
 
 Generated card images saved to: assets/generated/qa-cards/
 
@@ -153,9 +159,8 @@ Disclaimer: If supplement benefit mentioned.
 
 This agent does not produce:
 - Live images
-- API calls
 - Published content
-- Canva files (those are built manually by the human operator)
+- Canva files (execution is done by the human operator or via Canva MCP — not by this agent)
 
 ---
 

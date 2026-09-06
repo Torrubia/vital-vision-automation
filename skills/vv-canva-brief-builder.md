@@ -78,6 +78,25 @@ Content Type: [Feed post / Story / Reel cover / Carousel / Facebook banner]
 Goal: [Goal]
 ---
 
+## Traceability
+
+| Field | Value |
+|---|---|
+| Batch ID | [Batch ID from OCQ row, or — if not part of a batch] |
+| Source Row (Sheet) | [e.g. row 6] |
+| Source Competitor / Pattern | [e.g. Seed — knowledge-leader educational carousel] |
+| Product | [Inner Bloom / Inner Calm / Inner Balance / Inner Grow] |
+| Content Type | [Educational Carousel / Reel / Feed Post / Story] |
+| Platform | [Instagram / Facebook] |
+| Placement | [Feed / Reel / Story] |
+| Funnel Stage | [TOFU / MOFU / BOFU] |
+| Hook | [first line of caption or first frame text] |
+| Angle | [e.g. Microbiome literacy — curiosity-driven, no treatment claims] |
+| CTA | [exact CTA text] |
+| Metric to Watch | [e.g. Carousel completion rate, Saves, Comment quality] |
+
+---
+
 ## Canva Brief
 
 ### Format and Dimensions

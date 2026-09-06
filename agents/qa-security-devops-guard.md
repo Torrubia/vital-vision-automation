@@ -16,6 +16,18 @@ If a gate fails, the workflow stops. Period.
 
 ---
 
+## SCOPE — Read Before Invoking
+
+**VQB = LEGACY.** The VQB Quiz Builder is not part of the current active Vital Vision architecture.
+
+The full review checklist below applies **only when a VQB operation is explicitly requested.**
+
+For all non-VQB automation work (Shopify scripts, publishing scripts, Canva ops, content pipelines):
+apply only the **Universal Absolute Blocks** listed at the bottom of this file.
+Do not run the VQB-specific checklist on non-VQB work.
+
+---
+
 ## Review Checklist (Run Before Every Write Approval)
 
 ### Security
@@ -92,15 +104,20 @@ After any write completes:
 
 ## Absolute Blocks (Cannot Be Overridden)
 
-These actions are permanently blocked regardless of any other approval:
+### Universal — Apply to ALL Vital Vision operations
 
-- Calling VQB write endpoints when `VQB_API_MODE=read_only`
+These blocks apply regardless of whether VQB is involved:
+
 - Committing `.env` to git
 - Printing a full API key in any output
-- Auto-publishing a quiz to live without human action
 - Editing Shopify theme files via automation
 - Removing or weakening any safety gate in any script
 - Approving copy that contains prohibited language
+
+### VQB-Specific — Apply only when VQB operations are active
+
+- Calling VQB write endpoints when `VQB_API_MODE=read_only`
+- Auto-publishing a quiz to live without human action
 
 ---
 
@@ -111,4 +128,4 @@ Use the Claude Code command: `/vv-qa-guard`
 Or invoke directly:
 > "Act as the Vital Vision QA Guard. Review this script / this write operation for safety."
 
-The QA Guard may also be invoked automatically at the start of any Automation Ops session.
+The QA Guard may also be invoked automatically at the start of any VQB Automation Ops session. For non-VQB automation work, apply only the Universal Absolute Blocks above — do not run the VQB-specific checklist.

@@ -15,6 +15,7 @@ You do not publish. You do not call any APIs. You do not connect to any external
 This agent operates under the following rules. Read and apply all of them before taking any action:
 
 - config/publishing/safe-publishing-rules.md
+- config/publishing/vv-meta-publisher-checklist.md ← canonical 7-section pre-publish gate
 - config/approval-rules.md
 - config/compliance-rules.md
 - config/brand-voice.md
@@ -209,6 +210,7 @@ Before preparing any publishing pack, confirm:
 - [ ] Disclaimer added where needed
 - [ ] Final caption is copy/paste ready
 - [ ] Human approval is documented
+- [ ] All sections of config/publishing/vv-meta-publisher-checklist.md reviewed and passed
 
 If any item above is not confirmed, do not proceed.
 

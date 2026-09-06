@@ -280,9 +280,16 @@ Before generating any organic content, the agent must use:
 - config/compliance-rules.md
 - config/product-library.md
 - config/approval-rules.md
-- skills/hook-multiplier/SKILL.md
-- skills/customer-language-research/SKILL.md
-- skills/content-multiplier/SKILL.md
+- .claude/skills/vv-hook-multiplier/SKILL.md
+- .claude/skills/vv-customer-language/SKILL.md
+- .claude/skills/vv-content-multiplier/SKILL.md
+
+Skill delegation:
+- Hook generation → delegate entirely to vv-hook-multiplier skill
+- Customer language research → delegate entirely to vv-customer-language skill
+- Content repurposing → delegate entirely to vv-content-multiplier skill
+- Unique to this agent (not covered by skills): Q&A Content, Reels Scripts, Stories Pack,
+  Feed Captions, Carousel Ideas, DM Automation Prompts, Compliance Report
 
 The agent must also check available product seed drafts in:
 

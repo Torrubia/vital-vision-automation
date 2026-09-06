@@ -16,9 +16,7 @@
     "competitors:queue-write": "node scripts/queue-competitors-from-master.js --write",
     "organic:queue:mvp": "node scripts/generate-organic-content-queue.js",
     "organic:queue:format": "node scripts/format-organic-content-queue.js",
-    "organic:queue:format:apply": "node scripts/format-organic-content-queue.js --apply",
-    "organic:packs:dry-run": "node scripts/generate-publishing-packs.js",
-    "organic:packs:write": "node scripts/generate-publishing-packs.js --write"
+    "organic:queue:format:apply": "node scripts/format-organic-content-queue.js --apply"
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
