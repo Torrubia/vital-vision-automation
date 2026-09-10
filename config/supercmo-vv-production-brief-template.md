@@ -58,6 +58,7 @@ diverge, `config/compliance-rules.md` governs — update this template, never th
 may support
 helps support
 designed to support
+designed to complement
 helps maintain
 supports daily wellness
 supports digestive balance
