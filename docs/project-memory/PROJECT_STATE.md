@@ -5,8 +5,8 @@
 # UPDATE: After every meaningful implementation session.
 # RULE: Trust this file. Do not re-audit VERIFIED components without a specific reason.
 
-Last Updated: 2026-09-06
-Updated By: Claude Code (Session — VV Orchestrator + Strategic Core implemented; Agent Stabilization & Legacy Cleanup completed)
+Last Updated: 2026-09-10
+Updated By: Claude Code (Session — SuperCMO integration scope documented as CONDITIONAL GO; production brief template created; canonical safe-language list completed)
 
 ---
 
@@ -94,12 +94,13 @@ All 6 intelligence files populated 2026-09-01 from CONTENT_PLAN in generate-orga
 ### vital-vision-system/CLAUDE.md
 - **Status:** Verified intact. Not modified. Contains full brand/product/compliance/label ops operating guide.
 
-### Config Files (verified present, not modified)
+### Config Files (verified present)
 - `config/safety-rules.md` — AUTO_PUBLISH=false, REQUIRE_HUMAN_APPROVAL=true
-- `config/compliance-rules.md` — supplement claim rules
+- `config/compliance-rules.md` — supplement claim rules — **updated 2026-09-10:** `designed to complement` added to Preferred Safe Language (see below)
 - `config/brand-voice.md` — brand voice reference
 - `config/product-library.json` / `config/product-library.md` — product knowledge
 - `config/publishing/safe-publishing-rules.md` — master publishing safety rules
+- `config/supercmo-vv-production-brief-template.md` — created 2026-09-10; mandatory SuperCMO input wrapper
 
 ### Agents (verified present)
 - `agents/automation-ops-agent.md`
@@ -257,6 +258,29 @@ All 7 agents verified. Three confirmed P1 issues resolved. AGENT LAYER — STABL
 
 **Safety:** AUTO_PUBLISH=false · REQUIRE_HUMAN_APPROVAL=true · Product Truth gate intact · Compliance gate intact · SuperCMO = FUTURE/NOT ACTIVE · Analytics layer = NOT YET BUILT
 
+### SuperCMO Integration Governance (documented 2026-09-10)
+- **What exists:** The governance layer only. Scope, boundaries, and the mandatory input wrapper are documented and committed. SuperCMO itself is NOT installed — see NOT YET BUILT.
+- **Classification:** CONDITIONAL GO — approved for creative production only, pending installation.
+- **Position in pipeline:** `Approved Creative Brief → SuperCMO Production → VV QA → Human Approval`. Downstream of VV strategy, content intelligence, Product Truth, and compliance. NOT a strategic control plane — `vv-orchestrator` remains the sole control plane.
+- **Decisions added:** D-033 (downstream tool; permitted/excluded capability scope) · D-034 (Product Truth boundary) · D-035 (brief template mandatory; compliance is a pre-generation gate)
+- **PERMITTED capabilities (9):** `generating-ugc-videos` · `generating-ad-videos` · `generating-product-photos` · `generating-ai-actors` · `generating-audio` · `generating-images` · `generating-storyboards` · `generating-videos` · `adapting-formats`
+- **EXCLUDED capabilities (6):** `planning-campaigns` · `onboarding-user` (duplicate existing capabilities — D-008) · `analyzing-brand` (inference risk) · `analyzing-products` on VV products (Product Truth — D-034) · `writing-ad-copy` (organic-first — D-002) · `writing-video-scripts` (use VV-generated compliance-reviewed scripts)
+- **Product Truth boundary:** `analyzing-products` is competitor-only. It must NEVER run against Inner Bloom, Inner Calm, Inner Balance, or Inner Grow, and its output must never feed a VV production brief. Canonical sources (`config/product-library.md` + `skills/vv-creative-brand-system.md`) are the sole authority.
+- **Mandatory wrapper:** `config/supercmo-vv-production-brief-template.md` — 10 sections (Brief Identity · Product Truth · Approved Language · Forbidden Language + Forbidden Visual Concepts · UGC/FTC Testimonial Compliance · Brand Voice · Creative Brief · Spend Checkpoint · Compliance Pre-Check · Post-Generation QA Record). Must be completed from canonical sources before any SuperCMO skill is invoked.
+- **Compliance position:** Pre-generation gate. Scripts, copy, and audio pass `config/compliance-rules.md` BEFORE video or audio generation begins — not as post-production cleanup.
+- **Language lists:** Template Sections 3 and 4 mirror `config/compliance-rules.md` verbatim (Preferred Safe Language · Forbidden Claims · Forbidden Phrases). `config/compliance-rules.md` governs; the template is updated to match it, never the reverse. Verified byte-identical 2026-09-10.
+- **Credentials:** SuperCMO keys live in `~/.supercmo/.env`, separate from the VV project `.env`. Never committed (D-022). Telemetry disabled at install (`SUPERCMO_TELEMETRY=false`).
+- **Files changed:** `docs/project-memory/ARCHITECTURE.md` (additive SuperCMO section) · `docs/project-memory/DECISIONS.md` (D-033/034/035) · `config/supercmo-vv-production-brief-template.md` (new) · `config/compliance-rules.md` (+1 line)
+- **Nothing installed, nothing executable changed.** Documentation only. Zero runtime effect.
+- **Status:** Verified documented 2026-09-10. Commits `c83281e` and `7e864c7`, pushed to `origin/main`.
+
+### config/compliance-rules.md — Preferred Safe Language completed (2026-09-10)
+- **Change:** `designed to complement` added to the Preferred Safe Language list (+1 line, no deletions).
+- **Why:** The phrase was absent from `config/compliance-rules.md` while being formally approved in two registries — `vital-vision-system/brand/positioning-and-compliance.md` (Approved Product Phrases) and `vital-vision-system/supliful-label-ops/checklists/compliance-claims-checklist.md` ("acceptable") — and cited as approved safe language in D-006, `config/publishing/vv-meta-publisher-checklist.md`, `.claude/skills/vv-orchestrator/SKILL.md`, `vital-vision-system/CLAUDE.md`, and two supliful label-ops prompts. It is also load-bearing in live positioning copy for all four products.
+- **Resolution direction:** Completed the canonical list rather than narrowing the eight aligned files to match an incomplete one. No claim weakened; no forbidden term introduced; no approved phrase removed.
+- **Approved by:** Lucy, 2026-09-10 (compliance-gate change — required explicit sign-off per D-006).
+- **Status:** Verified applied 2026-09-10.
+
 ---
 
 ## PARTIALLY COMPLETE
@@ -292,6 +316,17 @@ All 7 agents verified. Three confirmed P1 issues resolved. AGENT LAYER — STABL
 
 ### Optimization Feedback Loop
 - **Status:** Not built. Depends on analytics layer being built first.
+
+### SuperCMO Installation
+- **Status:** NOT INSTALLED. Governance and scope are documented and committed (see VERIFIED / WORKING), but zero runtime capability exists. No SuperCMO skill has ever been invoked for Vital Vision.
+- **What's missing:**
+  1. Plugin install — `/plugin marketplace add SupercmoHQ/superCMO-skills`
+  2. WaveSpeed API key (minimum requirement) in `~/.supercmo/.env`; optional ElevenLabs key for voiceover
+  3. `SUPERCMO_TELEMETRY=false` set at install
+  4. Lucy-approved spend ceiling before any generation call (Section 8 of the brief template)
+- **Blocked on:** Lucy's decision to install and fund it. Not blocked technically.
+- **When installed, update:** this section → VERIFIED / WORKING, and reclassify SuperCMO in the `vv-orchestrator` Capability Registry, which currently lists it under FUTURE / NOT ACTIVE (accurate while uninstalled).
+- **Does not affect the current bottleneck.** The Visual Production Bridge is a Canva MCP task and does not depend on SuperCMO.
 
 ---
 
