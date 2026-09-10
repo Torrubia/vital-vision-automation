@@ -201,6 +201,56 @@ These are complementary layers of the same platform. The executor runs. The brai
 - Analytics Readiness Metadata is captured in Section 6 of vv-meta-publisher-checklist.md
 - No performance tracking, attribution, or feedback loop exists yet
 
+### SuperCMO (CONDITIONAL GO — pending installation)
+- **Role:** Specialized production tool. Operates DOWNSTREAM of VV strategy, content intelligence, Product Truth, and compliance. NOT the strategic control plane.
+- **Position in pipeline:** Approved Creative Brief → SuperCMO Production → VV QA → Human Approval
+- **Installation method:** Claude Code plugin (`/plugin marketplace add SupercmoHQ/superCMO-skills`)
+- **Key requirement:** WaveSpeed API key (minimum) + optional ElevenLabs for voiceover. Keys stored in `~/.supercmo/.env` — separate from VV project `.env`.
+- **Telemetry:** Anonymous, opt-out. Set `SUPERCMO_TELEMETRY=false` at install.
+
+#### PERMITTED SuperCMO capabilities in VV routing:
+```
+generating-ugc-videos      ← Reel/UGC production (primary value)
+generating-ad-videos       ← Cinematic product ad video
+generating-product-photos  ← Commercial product photography
+generating-ai-actors       ← Consistent AI actor for UGC
+generating-audio           ← Voiceover (ElevenLabs)
+generating-images          ← Multi-model image routing
+generating-storyboards     ← Pre-video visual approval
+generating-videos          ← Multi-model video routing
+adapting-formats           ← Multi-ratio format adaptation
+```
+
+#### EXCLUDED SuperCMO capabilities (must NOT be routed through VV):
+```
+planning-campaigns         ← Duplicates VV Orchestrator strategic function
+onboarding-user            ← Duplicates vv-creative-brand-system.md
+analyzing-brand            ← VV has verified creative-brand-system; inference risk
+analyzing-products         ← ON VV PRODUCTS: Product Truth contamination risk (see below)
+writing-ad-copy            ← VV is organic-first; paid ad copy not active
+writing-video-scripts      ← Use VV-generated, compliance-reviewed scripts instead
+```
+
+#### PRODUCT TRUTH BOUNDARY (non-negotiable):
+```
+VERIFIED VV PRODUCT TRUTH
+(config/product-library.md + vv-creative-brand-system.md)
+  ↓
+Human-authored production brief
+(config/supercmo-vv-production-brief-template.md)
+  ↓
+SuperCMO production generation
+
+NEVER:
+SuperCMO analyzing-products on VV product URLs/photos
+  → used as input to production brief
+```
+
+`analyzing-products` is permitted ONLY for competitor product analysis. It must never run against Inner Bloom, Inner Calm, Inner Balance, or Inner Grow to establish or infer product facts. VV's canonical product sources are the sole authority.
+
+#### COMPLIANCE REQUIREMENT:
+All SuperCMO-generated scripts, copy, and audio must pass `config/compliance-rules.md` review BEFORE video or audio generation begins. Use `config/supercmo-vv-production-brief-template.md` as the mandatory input wrapper for every SuperCMO brief — it embeds the compliance constraints.
+
 ---
 
 ## Repository Structure (Key Paths)

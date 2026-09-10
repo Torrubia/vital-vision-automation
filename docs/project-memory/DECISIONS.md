@@ -5,7 +5,7 @@
 # UPDATE: Only when a new durable decision is made, or an existing one is explicitly changed by Lucy.
 # RULE: These decisions stand until Lucy explicitly changes them. Do not re-open them without cause.
 
-Last Updated: 2026-09-02
+Last Updated: 2026-09-10
 
 ---
 
@@ -214,6 +214,46 @@ intelligence, customer language systems, or creative systems for each task.
 The routing doctrine is codified in `## Automatic Capability Routing` in root `CLAUDE.md`.
 This supplements — does not replace — D-007 (no rebuild), D-008 (no duplicates),
 D-018 (no unnecessary re-audit), and D-019 (project memory is authoritative).
+
+---
+
+## External Production Tooling — SuperCMO
+
+### D-033: SuperCMO Is a Downstream Production Tool — Not the Strategic Control Plane
+SuperCMO is approved as CONDITIONAL GO (2026-09-10) for creative production only. It operates
+DOWNSTREAM of VV strategy, content intelligence, Product Truth, and compliance:
+`Approved Creative Brief → SuperCMO Production → VV QA → Human Approval`
+The VV Orchestrator (`.claude/skills/vv-orchestrator`) remains the sole strategic control plane.
+
+PERMITTED capabilities: `generating-ugc-videos`, `generating-ad-videos`, `generating-product-photos`,
+`generating-ai-actors`, `generating-audio`, `generating-images`, `generating-storyboards`,
+`generating-videos`, `adapting-formats`.
+
+EXCLUDED capabilities — must NOT be routed through VV: `planning-campaigns` and `onboarding-user`
+(duplicate VV Orchestrator and `skills/vv-creative-brand-system.md` — D-008), `analyzing-brand`
+(inference risk against a verified brand system), `analyzing-products` on VV products (see D-034),
+`writing-ad-copy` (VV is organic-first — D-002), `writing-video-scripts` (use VV-generated,
+compliance-reviewed scripts instead).
+
+SuperCMO credentials live in `~/.supercmo/.env`, separate from the VV project `.env`, and are never
+committed (D-022). Telemetry is disabled at install (`SUPERCMO_TELEMETRY=false`).
+Full routing detail: `docs/project-memory/ARCHITECTURE.md` → SuperCMO section.
+
+### D-034: Product Truth Boundary — SuperCMO Must Never Infer VV Product Facts
+`analyzing-products` is permitted ONLY for competitor product analysis. It must never run against
+Inner Bloom, Inner Calm, Inner Balance, or Inner Grow to establish or infer product facts, and its
+output must never become input to a VV production brief.
+VV's canonical product sources (`config/product-library.md` + `skills/vv-creative-brand-system.md`,
+under the D-024 7-level hierarchy) are the sole authority on VV product truth.
+This extends D-025: no AI-generated or AI-inferred substitution for real product truth or assets.
+
+### D-035: Every SuperCMO Call Requires the Production Brief Template and Pre-Generation Compliance
+`config/supercmo-vv-production-brief-template.md` is the mandatory input wrapper for every SuperCMO
+production call. It must be completed from VV canonical sources before any SuperCMO skill is invoked.
+All scripts, copy, and audio must pass `config/compliance-rules.md` review BEFORE video or audio
+generation begins — compliance is a pre-generation gate, not a post-production cleanup step (D-006).
+SuperCMO output is draft only: `AUTO_PUBLISH=false`, `REQUIRE_HUMAN_APPROVAL=true` (D-003, D-004),
+and it still passes the pre-publish gate in `config/publishing/vv-meta-publisher-checklist.md` (D-005).
 
 ---
 
