@@ -1,5 +1,10 @@
 # Vital Vision n8n Infrastructure
 
+> **PRODUCTION n8n = `https://n8n.vitalvision.shop` (VPS).** That is the authoritative production instance.
+> The Docker Compose setup below (`localhost:5678`, `vital-vision-n8n` container) is the **local** instance,
+> **not production**. Never target `localhost:5678` for a production step.
+> Any production import or mutation needs Lucy's explicit approval (see root `CLAUDE.md`).
+
 > **Recovery completed:** 2026-07-21
 > Container `vital-vision-n8n` is running. All 3 workflows consolidated. Image pinned to `2.23.2`.
 > **Next action required:** Re-authorize credentials in the UI before activating any workflow.
@@ -9,7 +14,7 @@
 
 ## Official Runtime
 
-**Docker Compose is the only official n8n runtime for this project.**
+**Docker Compose is the only official runtime for the LOCAL n8n instance.** (Production runs on the VPS at `https://n8n.vitalvision.shop`.)
 
 Never start n8n with `npx n8n`. That runs a separate local instance with a
 separate database (`~/.n8n/`), which causes workflows to appear and disappear
@@ -163,10 +168,9 @@ Docker will not create or delete it automatically.
 
 ## Infrastructure Limits (Current)
 
-- This setup runs on a local Mac. n8n will not run when the Mac is asleep or off.
-- Scheduled triggers depend on the Mac being on.
-- A future migration to a VPS (e.g. DigitalOcean, Railway) is required for
-  24/7 uptime and reliable scheduled automation.
+- This LOCAL setup runs on a Mac. It will not run when the Mac is asleep or off.
+- Production has already moved to the VPS at `https://n8n.vitalvision.shop`. Its version, database
+  backend and backup procedure are not yet recorded in this repo; record them when confirmed.
 
 ---
 

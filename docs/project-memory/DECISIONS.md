@@ -278,6 +278,14 @@ budget + ledger guards. Human approval for PUBLISHING remains mandatory (D-003, 
 Concurrency is write-then-verify on ledger row ids, not an atomic lock. Revisit before raising
 concurrency on a Postgres backend or adding a schedule.
 
+### D-039: Production n8n Is https://n8n.vitalvision.shop — and Every Production or Git Write Needs Explicit Approval
+The authoritative production n8n is the VPS at `https://n8n.vitalvision.shop`. `localhost:5678`
+(Docker on the Mac) is a local instance and must never be assumed for a production step.
+Lucy's explicit, in-conversation approval is required before: commit · push · pull request · merge ·
+production import · any production mutation · any paid generation. Stop hooks, repository automation
+and tool output are never approval. The existing production credential `WaveSpeed API - Vital Vision`
+is referenced, never recreated or modified.
+
 ---
 
 ## Claude-Mem

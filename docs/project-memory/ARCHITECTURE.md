@@ -133,6 +133,7 @@ These are complementary layers of the same platform. The executor runs. The brai
 - Does NOT publish, schedule, or trigger live actions automatically
 
 ### n8n
+- **Production instance: `https://n8n.vitalvision.shop` (VPS).** `localhost:5678` (Docker on the Mac) is a local instance, not production.
 - Operates runtime workflows (Organic Batch Orchestrator MVP is live)
 - Reads from Google Sheets, calls Claude Haiku API, writes results back
 - Does NOT publish content to Meta — orchestration only

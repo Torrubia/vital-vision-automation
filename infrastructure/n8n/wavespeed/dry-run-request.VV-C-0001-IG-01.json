@@ -1,0 +1,12 @@
+{
+  "platform_concept_id": "VV-C-0001-IG-01",
+  "shot": "1",
+  "variant": 1,
+  "model": "wavespeed-ai/minimax-h3/text-to-video",
+  "model_inputs": {
+    "prompt": "Overhead shot. A pair of hands sets a clear glass of water down on a pale off-white kitchen counter. Soft natural side light, deep negative space, nothing else in frame. Calm, unhurried, real-time pacing. No text, no logos, no product packaging, no bottles, no labels, no faces.",
+    "duration": 5,
+    "aspect_ratio": "9:16",
+    "resolution": "768p"
+  }
+}

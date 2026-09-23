@@ -21,7 +21,7 @@ const MOCK = process.env.MOCK_BASE_URL || 'http://127.0.0.1:18765';
 const BASE = process.env.N8N_BASE_URL;
 const KEY = process.env.N8N_API_KEY;
 if (!BASE || !KEY || !process.env.N8N_SANDBOX_EMAIL || !process.env.N8N_SANDBOX_PASSWORD) throw new Error('set N8N_BASE_URL, N8N_API_KEY, N8N_SANDBOX_EMAIL, N8N_SANDBOX_PASSWORD (scratch instance only)');
-if (/:5678\b/.test(BASE)) throw new Error('refusing: 5678 is the production n8n port');
+if (/n8n\.vitalvision\.shop/i.test(BASE)) throw new Error('refusing: n8n.vitalvision.shop is PRODUCTION — offline E2E runs against a scratch instance only');
 
 const TABLE = 'vv_wavespeed_generation_ledger';
 

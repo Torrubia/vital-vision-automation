@@ -54,7 +54,7 @@ const trigger = wf.nodes.filter((n) => /trigger/i.test(n.type));
 report('A', 'DATA_TABLE_CREATED (definition)', [
   [`schema defines table "${schema.name}"`, schema.name === cfg.LEDGER_TABLE_NAME],
   [`all ${dtNodes.length} Data Table nodes target "${cfg.LEDGER_TABLE_NAME}" by name`, dtNodes.length > 0 && dtNodes.every((n) => n.parameters.dataTableId.mode === 'name' && n.parameters.dataTableId.value === cfg.LEDGER_TABLE_NAME)],
-  ['workflow static data is NOT used as a ledger', !/getWorkflowStaticData|\$getWorkflowStaticData|staticData/.test(JSON.stringify(wf))],
+  ['workflow static data is NOT used as a ledger', !/getWorkflowStaticData/.test(JSON.stringify(wf.nodes)) && (wf.staticData == null || Object.keys(wf.staticData).length === 0)],
 ], 'the table itself is created in production by import-to-n8n.js --apply (not yet run against production)');
 
 // B

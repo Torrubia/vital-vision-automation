@@ -1,6 +1,6 @@
 # WaveSpeed Generation — Durable Ledger (n8n)
 
-> **Status:** built and validated OFFLINE (no paid call made). Not yet imported into production n8n.
+> **Status:** built and validated OFFLINE (no paid call made). Not yet imported into production n8n (`https://n8n.vitalvision.shop`).
 > `AUTO_PUBLISH=false` | `REQUIRE_HUMAN_APPROVAL=true` | `SAFE_DRAFT_MODE=true`
 
 Production workflow: `infrastructure/n8n/workflows/vv-wavespeed-generation-ledger-guarded.json`
@@ -19,7 +19,9 @@ Workflow static data is **not** used for any ledger, spend or lock state.
 | `build-workflow.js` | Generates the importable workflow JSON. |
 | `ledger-table-schema.json` | Data Table columns. |
 | `validate-workflow.js` | Non-paid structural validation (report items A–J). |
-| `import-to-n8n.js` | Creates the Data Table and a NEW, INACTIVE workflow through the n8n public API. Plan-only unless you pass `--apply`. |
+| `import-to-n8n.js` | Creates the Data Table and a NEW, INACTIVE workflow through the n8n public API, binding the existing credential by name. Plan-only (GET) unless you pass `--apply`. |
+| `verify-dry-run.js` | Read-only verification of the single production dry run. |
+| `dry-run-request.example.json` | Template for the Job Request values used at import. |
 | `test/ledger-core.test.js` | Unit tests for the guards. |
 | `test/mock-wavespeed-server.js`, `test/offline-e2e.js` | End-to-end test against a **scratch** n8n instance and a local mock. Never production. |
 
@@ -98,23 +100,33 @@ The guard is a *write-then-verify* claim. Every attempt inserts its own row firs
 
 ---
 
-## Import into production (Lucy's Mac)
+## Production deployment — `https://n8n.vitalvision.shop` (VPS)
 
-Prerequisites: n8n 2.23.2 running (`bash infrastructure/n8n/scripts/verify-n8n.sh`), plus an n8n API key (Settings → n8n API) with scopes `dataTable:list`, `dataTable:read`, `dataTable:create`, `workflow:list`, `workflow:read`, `workflow:create`. Export the key in your shell only; never commit it.
+Production n8n is **`https://n8n.vitalvision.shop`**, not `localhost:5678`. Every step below that writes
+to production needs Lucy's explicit approval first (D-039). The existing credential
+**`WaveSpeed API - Vital Vision`** is referenced by name and never recreated or modified.
+
+API key scopes (least privilege; there are no update, delete or activate scopes):
+`workflow:list` `workflow:read` `workflow:create` `credential:list` `dataTable:list` `dataTable:read`
+`dataTable:create` `execution:list` `execution:read` `dataTableRow:read`
 
 ```bash
-node infrastructure/n8n/wavespeed/validate-workflow.js          # must be 10/10 PASS
-N8N_API_KEY=… node infrastructure/n8n/wavespeed/import-to-n8n.js          # plan (read-only)
-N8N_API_KEY=… node infrastructure/n8n/wavespeed/import-to-n8n.js --apply  # create
+export N8N_BASE_URL=https://n8n.vitalvision.shop     # N8N_API_KEY comes from the shell / environment secrets
+cp infrastructure/n8n/wavespeed/dry-run-request.example.json /tmp/dry-run-request.json   # fill in real values
+node infrastructure/n8n/wavespeed/validate-workflow.js                                   # must be 10/10
+node infrastructure/n8n/wavespeed/import-to-n8n.js --credential-name "WaveSpeed API - Vital Vision" --request /tmp/dry-run-request.json           # PLAN (GET only)
+node infrastructure/n8n/wavespeed/import-to-n8n.js --credential-name "WaveSpeed API - Vital Vision" --request /tmp/dry-run-request.json --apply   # after approval
+# one dry run: open the workflow in the UI, check confirm_paid = NOT-APPROVED, click "Execute workflow" once
+node infrastructure/n8n/wavespeed/verify-dry-run.js --workflow-id <id> --credential-name "WaveSpeed API - Vital Vision"   # GET only
 ```
 
-The script refuses to overwrite a workflow with the same name. It never activates anything and never touches credentials. It deletes nothing, so the existing connection-test workflow stays until this one is validated.
+`import-to-n8n.js --apply` creates the Data Table if it's missing, then a NEW workflow as INACTIVE. It
+forces `confirm_paid = NOT-APPROVED` and binds the credential on the 3 WaveSpeed HTTP nodes. It then
+confirms the deployed copy is identical to the validated build and that no pre-existing workflow changed.
+It refuses to overwrite a same-named workflow, and it never activates, deletes, or writes credentials.
 
-Then, in the n8n UI:
-1. Open the new workflow and bind the **existing** WaveSpeed credential on the 3 WaveSpeed HTTP nodes (Price Check, Paid POST, Status GET). If that credential isn't a Header Auth type, switch the node's *Generic Auth Type* to match it. Don't edit the credential itself.
-2. Fill **Job Request** (`platform_concept_id`, `shot`, `model_inputs` with the approved prompt). Leave `confirm_paid = NOT-APPROVED`.
-3. **Production dry run** (non-paid): execute. Expect `FAILED_CLEAN` / `DRY_RUN_COMPLETE`, a ledger row with `estimated_cost_usd ≈ 0.20`, and no paid POST. This proves the credential, the pricing endpoint response shape and the Data Table in production.
-4. Only then, for the **first paid test**: set `confirm_paid = APPROVED-BY-LUCY` and execute once. Afterwards, set it back to `NOT-APPROVED`.
+The dry run makes the free price check only. It ends at the arming switch as `FAILED_CLEAN`
+(`DRY_RUN_COMPLETE`) before `SUBMITTING`, so the paid POST can't be reached.
 
 ## Offline end-to-end test (scratch instance only)
-Install `n8n@2.23.2` in a scratch folder and start it on a non-5678 port with its own `N8N_USER_FOLDER`. Create an owner and an API key, then start `test/mock-wavespeed-server.js`. Run `import-to-n8n.js --apply` against the scratch instance, then run `test/offline-e2e.js` (env vars are listed in its header). The runner refuses port 5678.
+Install `n8n@2.23.2` in a scratch folder and start it on a non-5678 port with its own `N8N_USER_FOLDER`. Create an owner and an API key, then start `test/mock-wavespeed-server.js`. Run `import-to-n8n.js --scratch --apply` against the scratch instance, then run `test/offline-e2e.js` (env vars are listed in its header). The runner refuses the production host.

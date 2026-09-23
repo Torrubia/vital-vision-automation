@@ -1,0 +1,7 @@
+{
+  "platform_concept_id": "REPLACE-with-approved-concept-id",
+  "shot": "shot-01",
+  "variant": 1,
+  "model": "wavespeed-ai/minimax-h3/text-to-video",
+  "model_inputs": { "prompt": "REPLACE with the approved, compliance-checked prompt" }
+}

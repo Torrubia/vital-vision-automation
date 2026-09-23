@@ -4,6 +4,7 @@
 # Verifies that the vital-vision-n8n container is running and healthy.
 # Checks: container status, HTTP health endpoint, workflow count via API.
 # Does NOT start or stop the container.
+# LOCAL instance only — production n8n is https://n8n.vitalvision.shop (VPS), not localhost:5678.
 # =============================================================================
 set -euo pipefail
 

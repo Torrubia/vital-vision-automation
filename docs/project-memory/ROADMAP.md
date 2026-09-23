@@ -28,8 +28,8 @@ Completed across two sessions (2026-09-01 → 2026-09-02):
 
 ### WaveSpeed Production Generation (n8n)
 **Status: ledger hardened and validated offline (2026-09-23), awaiting production import**
-1. Import into production n8n (`infrastructure/n8n/wavespeed/import-to-n8n.js --apply`, run by Lucy)
-2. Bind the existing WaveSpeed credential; run the production dry run (`confirm_paid=NOT-APPROVED`)
+1. Import into production n8n at `https://n8n.vitalvision.shop` (`import-to-n8n.js --apply`, binds `WaveSpeed API - Vital Vision` by name) — needs Lucy's approval
+2. One production dry run (`confirm_paid=NOT-APPROVED`) + `verify-dry-run.js` report
 3. First paid test (~$0.20, ceiling $0.25) with `confirm_paid=APPROVED-BY-LUCY`
 4. After validation: concurrency → 3, larger batches, replace the arming switch with automated guards
 
