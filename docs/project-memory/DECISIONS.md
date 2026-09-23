@@ -5,7 +5,7 @@
 # UPDATE: Only when a new durable decision is made, or an existing one is explicitly changed by Lucy.
 # RULE: These decisions stand until Lucy explicitly changes them. Do not re-open them without cause.
 
-Last Updated: 2026-09-10
+Last Updated: 2026-09-23
 
 ---
 
@@ -254,6 +254,29 @@ All scripts, copy, and audio must pass `config/compliance-rules.md` review BEFOR
 generation begins — compliance is a pre-generation gate, not a post-production cleanup step (D-006).
 SuperCMO output is draft only: `AUTO_PUBLISH=false`, `REQUIRE_HUMAN_APPROVAL=true` (D-003, D-004),
 and it still passes the pre-publish gate in `config/publishing/vv-meta-publisher-checklist.md` (D-005).
+
+---
+
+## Paid Generation (WaveSpeed via n8n)
+
+### D-036: The WaveSpeed Ledger Is an n8n Data Table — Never Workflow Static Data
+Duplicate-billing protection, job state, daily spend and concurrency state live in the n8n Data Table
+`vv_wavespeed_generation_ledger`, which survives executions and n8n restarts. Workflow static data
+must not be used as an authoritative ledger. `SUBMITTING` is written to the ledger BEFORE the paid POST.
+
+### D-037: The Paid POST Is Single-Attempt and Never Auto-Retried
+Exactly one paid POST node, reachable from one path, with retries off and outside every loop.
+Status polling (GET) may retry. An uncertain POST outcome becomes `PAYMENT_STATE_UNKNOWN`, which blocks
+that job and all new paid work until a human reconciles it against the WaveSpeed dashboard.
+
+### D-038: First Paid Test Limits
+$0.25 max per generation (the expected price is ~$0.20) · $10.00/day · batch 1 · concurrency 1 · model allowlist =
+`wavespeed-ai/minimax-h3/text-to-video` only · manual trigger only · `confirm_paid=APPROVED-BY-LUCY`
+required for the first paid test only. After that test is validated: concurrency may rise to 3 and batch
+limits may increase, and the per-generation arming switch is replaced by the automated allowlist + price +
+budget + ledger guards. Human approval for PUBLISHING remains mandatory (D-003, D-004).
+Concurrency is write-then-verify on ledger row ids, not an atomic lock. Revisit before raising
+concurrency on a Postgres backend or adding a schedule.
 
 ---
 

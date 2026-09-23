@@ -137,6 +137,9 @@ These are complementary layers of the same platform. The executor runs. The brai
 - Reads from Google Sheets, calls Claude Haiku API, writes results back
 - Does NOT publish content to Meta — orchestration only
 - Production workflows: do not modify without explicit approval
+- WaveSpeed paid generation (built 2026-09-23, not yet imported): `infrastructure/n8n/wavespeed/` →
+  workflow `vv-wavespeed-generation-ledger-guarded.json`, durable ledger = Data Table
+  `vv_wavespeed_generation_ledger` (D-036/037/038). Output stops at ASSET_CANDIDATE (never published).
 
 ### Google Sheets (`vital_vision_competitor_research_tracker`)
 - Source of truth for competitor research (Competitors tab)

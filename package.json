@@ -18,7 +18,10 @@
     "organic:queue:format": "node scripts/format-organic-content-queue.js",
     "organic:queue:format:apply": "node scripts/format-organic-content-queue.js --apply",
     "organic:packs:dry-run": "node scripts/generate-publishing-packs.js",
-    "organic:packs:write": "node scripts/generate-publishing-packs.js --write"
+    "organic:packs:write": "node scripts/generate-publishing-packs.js --write",
+    "wavespeed:build": "node infrastructure/n8n/wavespeed/build-workflow.js",
+    "wavespeed:test": "node --test infrastructure/n8n/wavespeed/test/ledger-core.test.js",
+    "wavespeed:validate": "node infrastructure/n8n/wavespeed/validate-workflow.js"
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.1",

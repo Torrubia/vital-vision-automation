@@ -5,8 +5,8 @@
 # UPDATE: After every meaningful implementation session.
 # RULE: Trust this file. Do not re-audit VERIFIED components without a specific reason.
 
-Last Updated: 2026-09-10
-Updated By: Claude Code (Session — SuperCMO integration scope documented as CONDITIONAL GO; production brief template created; canonical safe-language list completed)
+Last Updated: 2026-09-23
+Updated By: Claude Code (Session — WaveSpeed generation ledger hardened on n8n Data Tables; validated offline, not yet imported to production, no paid call made)
 
 ---
 
@@ -284,6 +284,16 @@ All 7 agents verified. Three confirmed P1 issues resolved. AGENT LAYER — STABL
 ---
 
 ## PARTIALLY COMPLETE
+
+### WaveSpeed Generation Ledger — n8n Data Tables (built 2026-09-23)
+- **What exists:** `infrastructure/n8n/wavespeed/` (ledger core, generator, schema, validator, import script, tests) and the generated workflow `infrastructure/n8n/workflows/vv-wavespeed-generation-ledger-guarded.json` (34 nodes, Manual Trigger only).
+- **Durable store:** n8n Data Table `vv_wavespeed_generation_ledger` (one row per attempt, full `state_history`). Workflow static data is NOT used (D-036).
+- **Guards:** model allowlist (`wavespeed-ai/minimax-h3/text-to-video` only) · batch ≤ 1 · duplicate `generation_job_id` block · concurrency 1 (write-then-verify, NOT atomic) · $0.25 per generation · $10.00 per day · SUBMITTING persisted and verified before the single paid POST · paid POST never retried · uncertain → PAYMENT_STATE_UNKNOWN · success → ASSET_CANDIDATE, approved=false, published=false, requires_human_approval=true.
+- **Arming switch:** `confirm_paid` defaults to `NOT-APPROVED`; `APPROVED-BY-LUCY` only for the first paid test.
+- **Verified (offline, 2026-09-23):** 15/15 unit tests · structural validator 10/10 (A–J) and it catches 6/6 injected unsafe mutations · import script tested against a scratch n8n 2.23.2 (created table + INACTIVE workflow; refused to overwrite) · 15/15 end-to-end scenarios on scratch n8n + local WaveSpeed mock (dry run, success + polling, duplicate, HTTP 500 → UNKNOWN with no retry, concurrency, price ceiling, allowlist, 401, daily cap, 3-way race → 1 POST) · ledger unchanged across an n8n restart.
+- **NOT yet done:** import into production n8n (`import-to-n8n.js --apply` on Lucy's Mac, with an n8n API key) · binding the existing WaveSpeed credential on the 3 HTTP nodes · production dry run (verifies the real pricing response shape) · first paid test.
+- **Unverified assumptions:** WaveSpeed response shapes (pricing `data.discounted_price/unit_price`, submit `data.id`, result `data.status/outputs`) come from the public API docs and the earlier price check; the mock mirrors them. A shape mismatch fails closed (FAILED_CLEAN before the POST, PAYMENT_STATE_UNKNOWN after it).
+- **Existing connection-test workflow:** untouched; delete only after this workflow is validated in production.
 
 ### Status Gate Architecture (Pack Ready → Creative Ready → Ready to Schedule → Scheduled → Published)
 - **Pack Ready:** 5 rows confirmed at this stage ✓

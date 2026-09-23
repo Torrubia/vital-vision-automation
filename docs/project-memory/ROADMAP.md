@@ -5,7 +5,7 @@
 # UPDATE: When NOW or NEXT changes. Not a backlog — stay lean.
 # RULE: Do not add items here that are speculative or far future. Keep it focused.
 
-Last Updated: 2026-09-02
+Last Updated: 2026-09-23
 
 ---
 
@@ -25,6 +25,13 @@ Completed across two sessions (2026-09-01 → 2026-09-02):
 - `## SECURITY / MEMORY RULES` added to root `CLAUDE.md` and verified
 
 **Infrastructure and memory setup is COMPLETE. Moving to NEXT.**
+
+### WaveSpeed Production Generation (n8n)
+**Status: ledger hardened and validated offline (2026-09-23), awaiting production import**
+1. Import into production n8n (`infrastructure/n8n/wavespeed/import-to-n8n.js --apply`, run by Lucy)
+2. Bind the existing WaveSpeed credential; run the production dry run (`confirm_paid=NOT-APPROVED`)
+3. First paid test (~$0.20, ceiling $0.25) with `confirm_paid=APPROVED-BY-LUCY`
+4. After validation: concurrency → 3, larger batches, replace the arming switch with automated guards
 
 ---
 

@@ -1,0 +1,26 @@
+{
+  "name": "vv_wavespeed_generation_ledger",
+  "description": "Durable WaveSpeed generation ledger. One row per generation attempt. System columns id / createdAt / updatedAt are added by n8n. generation_job_id is logically unique: at most one row per generation_job_id may be in SUBMITTING, SUBMITTED, PROCESSING, COMPLETED, ASSET_CANDIDATE or PAYMENT_STATE_UNKNOWN (enforced by the workflow's duplicate guard, not by a database constraint — n8n Data Tables have no unique constraints).",
+  "columns": [
+    { "name": "generation_job_id", "type": "string" },
+    { "name": "platform_concept_id", "type": "string" },
+    { "name": "shot", "type": "string" },
+    { "name": "model", "type": "string" },
+    { "name": "estimated_cost_usd", "type": "number" },
+    { "name": "prediction_id", "type": "string" },
+    { "name": "status", "type": "string" },
+    { "name": "submitted_at", "type": "string" },
+    { "name": "completed_at", "type": "string" },
+    { "name": "asset_url", "type": "string" },
+    { "name": "payment_state", "type": "string" },
+    { "name": "created_at", "type": "string" },
+    { "name": "updated_at", "type": "string" },
+    { "name": "spend_date", "type": "string" },
+    { "name": "last_reason", "type": "string" },
+    { "name": "state_history", "type": "string" },
+    { "name": "n8n_execution_id", "type": "string" },
+    { "name": "approved", "type": "boolean" },
+    { "name": "published", "type": "boolean" },
+    { "name": "requires_human_approval", "type": "boolean" }
+  ]
+}
